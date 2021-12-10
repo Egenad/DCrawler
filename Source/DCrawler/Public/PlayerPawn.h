@@ -71,6 +71,23 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Timeline")
 		UCurveFloat* ForwardCurve;
 
+	// Gameplay Related
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Attribute")
+		float health;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Attribute")
+		float max_health;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Attribute")
+		float base_damage;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Attribute")
+		float mana;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Attribute")
+		float stamina;
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;

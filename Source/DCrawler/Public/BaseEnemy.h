@@ -4,6 +4,9 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+
+//#include "BaseAbility.h"
+
 #include "BaseEnemy.generated.h"
 
 UCLASS()
@@ -20,6 +23,9 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Enemy")
 		float base_damage;
+
+	//UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Abilities")
+		//TArray<BaseAbility> abilities;
 
 
 protected:

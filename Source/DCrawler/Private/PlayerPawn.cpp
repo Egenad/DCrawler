@@ -9,6 +9,19 @@ APlayerPawn::APlayerPawn()
  	// Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
+	SceneComponent = CreateDefaultSubobject<USceneComponent>(TEXT("DefaultScene"));
+	SetRootComponent(SceneComponent);
+
+	character = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Character"));
+	character->SetupAttachment(SceneComponent);
+
+	static ConstructorHelpers::FObjectFinder<UStaticMesh>MeshAsset(TEXT("StaticMesh'/Game/Assets/Mesh/BasePlane.BasePlane'"));
+
+	if (MeshAsset.Succeeded()) {
+		UStaticMesh* Asset = MeshAsset.Object;
+		character->SetStaticMesh(Asset);
+	}
+
 }
 
 // Called when the game starts or when spawned

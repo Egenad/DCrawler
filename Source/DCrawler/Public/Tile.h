@@ -53,7 +53,7 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Tile")
 		TEnumAsByte<TileType> type;
 
-	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = Translation)
+	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = "Translation")
 		USceneComponent* SceneComponent;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Tile")

@@ -7,6 +7,7 @@
 
 #include "Components/TimelineComponent.h"
 #include "TileMap.h"
+#include "BaseAbility.h"
 
 #include "PlayerPawn.generated.h"
 
@@ -71,7 +72,18 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Timeline")
 		UCurveFloat* ForwardCurve;
 
+	// Comps
+
+	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = "Translation")
+		USceneComponent* SceneComponent;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character")
+		UStaticMeshComponent* character;
+
 	// Gameplay Related
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Attribute")
+		int level;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Attribute")
 		float health;
@@ -87,6 +99,9 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Attribute")
 		float stamina;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Attribute")
+		TArray<TSubclassOf<ABaseAbility>> abilities;
 
 protected:
 	// Called when the game starts or when spawned

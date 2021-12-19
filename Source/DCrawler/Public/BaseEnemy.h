@@ -4,9 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-
-//#include "BaseAbility.h"
-
+#include "BaseAbility.h"
 #include "BaseEnemy.generated.h"
 
 UCLASS()
@@ -19,13 +17,30 @@ public:
 	ABaseEnemy();
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Enemy")
+		int level;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Enemy")
 		float health;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Enemy")
 		float base_damage;
 
-	//UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Abilities")
-		//TArray<BaseAbility> abilities;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Enemy")
+		float mana;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Enemy")
+		float stamina;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Attribute")
+		TArray<TSubclassOf<ABaseAbility>> abilities;
+
+	// Comps
+
+	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = "Translation")
+		USceneComponent* SceneComponent;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character")
+		UStaticMeshComponent* character;
 
 
 protected:

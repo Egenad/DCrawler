@@ -65,6 +65,10 @@ void APlayerPawn::SetupPlayerInputComponent(UInputComponent* PlayerInputComponen
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
+	PlayerInputComponent->BindAction("MoveForward", IE_Pressed, this, &APlayerPawn::MoveForward);
+	PlayerInputComponent->BindAction("MoveBack", IE_Pressed, this, &APlayerPawn::TurnBack);
+	PlayerInputComponent->BindAction<FTurnDelegate>("TurnRight", IE_Pressed, this, &APlayerPawn::TurnRight, true);
+	PlayerInputComponent->BindAction<FTurnDelegate>("TurnLeft", IE_Pressed, this, &APlayerPawn::TurnRight, false);
 }
 
 void APlayerPawn::TurnRight(bool right) {
@@ -99,6 +103,11 @@ void APlayerPawn::TurnRight(bool right) {
 
 	}
 
+}
+
+void APlayerPawn::Attack(){
+	//if my turn
+		
 }
 
 void APlayerPawn::TurnTimelineProgress(float alpha)

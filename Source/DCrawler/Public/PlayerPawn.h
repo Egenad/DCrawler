@@ -22,14 +22,17 @@ public:
 
 	//FUNCTIONS
 
-	UFUNCTION(BlueprintCallable, Category = "Player")
+	UFUNCTION(BlueprintCallable, Category = "Action")
 		void MoveForward();
 
-	UFUNCTION(BlueprintCallable, Category = "Player")
+	UFUNCTION(BlueprintCallable, Category = "Action")
 		void TurnBack();
 
-	UFUNCTION(BlueprintCallable, Category = "Player")
+	UFUNCTION(BlueprintCallable, Category = "Action")
 		void TurnRight(bool right);
+
+	UFUNCTION(BlueprintCallable, Category = "Action")
+		void Attack();
 
 	UFUNCTION(Category = "TurnTimeline")
 		void TurnTimelineProgress(float alpha);
@@ -79,6 +82,11 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character")
 		UStaticMeshComponent* character;
+
+	UPROPERTY(BlueprintReadOnly, Category = "Input")
+		UInputComponent* player_input;
+
+	DECLARE_DELEGATE_OneParam(FTurnDelegate, bool);
 
 	// Gameplay Related
 

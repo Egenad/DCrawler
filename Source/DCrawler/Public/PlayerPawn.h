@@ -6,6 +6,7 @@
 #include "GameFramework/Pawn.h"
 
 #include "Components/TimelineComponent.h"
+#include "Camera/CameraComponent.h"
 #include "TileMap.h"
 #include "BaseAbility.h"
 
@@ -82,6 +83,9 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character")
 		UStaticMeshComponent* character;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character")
+		UCameraComponent* camera;
 
 	UPROPERTY(BlueprintReadOnly, Category = "Input")
 		UInputComponent* player_input;

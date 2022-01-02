@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "Tile.h"
+#include "BaseEnemy.h"
 #include "TileMap.generated.h"
 
 USTRUCT(BlueprintType)
@@ -35,6 +36,9 @@ public:
 
 	UFUNCTION(BlueprintCallable, CallInEditor, Category = "Tilemap")
 		void ResetTilemap();
+	
+	UFUNCTION(BlueprintCallable, CallInEditor, Category = "Tilemap")
+		FCoord TransformWorldLocationToCoordinate(FVector location);
 
 	UFUNCTION(BlueprintCallable, Category = "Tilemap")
 		int32 GetTileByLocation(FCoord coordinates);
@@ -64,13 +68,16 @@ public:
 		int width = 5;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Tilemap")
-		int TileSize = 100;
+		int TileSize = 400;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Tilemap")
 		TArray<ATile*> tiles;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Tilemap")
 		TMap<TEnumAsByte<TileType>, TSubclassOf<ATile>> type_map;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Enemies")
+		TMap<FString, TSubclassOf<ABaseEnemy>> enemy_map;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Tilemap")
 		TMap<TEnumAsByte<Directions>, FDirectionData> direction_map;

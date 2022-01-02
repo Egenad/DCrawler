@@ -15,6 +15,9 @@ APlayerPawn::APlayerPawn()
 	character = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Character"));
 	character->SetupAttachment(SceneComponent);
 
+	camera = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
+	camera->SetupAttachment(SceneComponent);
+
 	static ConstructorHelpers::FObjectFinder<UStaticMesh>MeshAsset(TEXT("StaticMesh'/Game/Assets/Mesh/BasePlane.BasePlane'"));
 
 	if (MeshAsset.Succeeded()) {

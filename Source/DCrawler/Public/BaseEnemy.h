@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "BaseAbility.h"
+#include "Tile.h"
 #include "BaseEnemy.generated.h"
 
 UCLASS()
@@ -34,6 +35,9 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Attribute")
 		TArray<TSubclassOf<ABaseAbility>> abilities;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Tile")
+		ATile* current_tile;
+
 	// Comps
 
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = "Translation")
@@ -41,6 +45,14 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character")
 		UStaticMeshComponent* character;
+
+	// Functions
+
+	UFUNCTION(BlueprintCallable, Category = "Orientation")
+		void setOrientationToPlayerCamera();
+
+	UFUNCTION(BlueprintCallable, Category = "Tilemap")
+		void initializeTile();
 
 
 protected:

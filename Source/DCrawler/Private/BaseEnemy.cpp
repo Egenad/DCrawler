@@ -2,6 +2,8 @@
 
 
 #include "BaseEnemy.h"
+#include "Kismet/KismetMathLibrary.h"
+#include "Kismet/GameplayStatics.h"
 
 // Sets default values
 ABaseEnemy::ABaseEnemy()
@@ -23,6 +25,26 @@ ABaseEnemy::ABaseEnemy()
 	}
 }
 
+void ABaseEnemy::setOrientationToPlayerCamera()
+{
+
+	APlayerController* controller = UGameplayStatics::GetPlayerController(this, 0);
+	APawn* player = controller->GetPawn();
+
+	FVector target_location = player->GetActorLocation();
+	FVector my_location = this->GetActorLocation();
+
+	FRotator new_rotation = UKismetMathLibrary::FindLookAtRotation(my_location, target_location);
+
+	FRotator actual_rotation = this->GetActorRotation();
+	this->SetActorRotation(FRotator(0, new_rotation.Yaw, 0));
+
+}
+
+void ABaseEnemy::initializeTile()
+{
+}
+
 // Called when the game starts or when spawned
 void ABaseEnemy::BeginPlay()
 {
@@ -34,6 +56,9 @@ void ABaseEnemy::BeginPlay()
 void ABaseEnemy::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+	setOrientationToPlayerCamera();
 
 }
+
+
 

@@ -97,6 +97,25 @@ void ATileMap::GenerateTilemap() {
 		for (int i = 0; i < tiles.Num(); i++) {
 			SetTileNeighbours(tiles[i]);
 		}
+
+		// Temporary Code ////////////////////////////////////////////////
+		// To do: once the tilemap is created, load and create all enemies
+
+		FActorSpawnParameters spawn_params;
+
+		TSubclassOf<ABaseEnemy>* new_enemy_class = enemy_map.Find("Skeleton");
+		FCoord new_coord{ 5,5 };
+
+		int index = GetTileByLocation(new_coord);
+
+		if (new_enemy_class != nullptr) {
+			ABaseEnemy* new_enemy = GetWorld()->SpawnActor<ABaseEnemy>(*new_enemy_class, FVector(new_coord.c_x * TileSize, new_coord.c_y * TileSize, 0), FRotator(0, 0, 0), spawn_params);
+			new_enemy->current_tile = tiles[index];
+			new_enemy->current_tile->reserved = true;
+		}
+		
+		//////////////////////////////////////////////////////////////////
+
 	}
 }
 
@@ -155,6 +174,17 @@ void ATileMap::ResetTilemap() {
 		}
 		tiles.Empty();
 	}
+}
+
+FCoord ATileMap::TransformWorldLocationToCoordinate(FVector location){
+
+	int x = location.X;
+	int y = location.Y;
+
+	int c_x = round(x / TileSize);
+	int c_y = round(y / TileSize);
+
+	return FCoord{ c_x, c_y };
 }
 
 void ATileMap::SetTileNeighbours(ATile* tile) {

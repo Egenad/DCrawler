@@ -6,40 +6,11 @@
 #include "GameFramework/Actor.h"
 
 #include "Containers/Array.h"
+#include "Utility.h"
 
 #include "Tile.generated.h"
 
-UENUM()
-enum Directions {
-	D_UP		UMETA(DisplayName = "Up"),
-	D_RIGHT		UMETA(DisplayName = "Right"),
-	D_DOWN		UMETA(DisplayName = "Down"),
-	D_LEFT		UMETA(DisplayName = "Left"),
-	D_END
-};
-
-UENUM()
-enum TileType {
-	TT_Null		UMETA(DisplayName = "Null"),
-	TT_Void		UMETA(DisplayName = "Void"),
-	TT_Terrain	UMETA(DisplayName = "Terrain"),
-	TT_Wall		UMETA(DisplayName = "Wall"),
-	TT_Ice		UMETA(DisplayName = "Ice")
-};
-
-USTRUCT(BlueprintType)
-struct FCoord {
-
-	GENERATED_BODY()
-
-public:
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-		int32 c_x;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-		int32 c_y;
-};
+class ATileMap;
 
 UCLASS()
 class DCRAWLER_API ATile : public AActor
@@ -50,7 +21,14 @@ public:
 	// Sets default values for this actor's properties
 	ATile();
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Tile")
+	// Functions
+
+	UFUNCTION(BlueprintCallable, CallInEditor, Category = "Type")
+		void ChangeTileType();
+
+	// Variables
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Type")
 		TEnumAsByte<TileType> type;
 
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = "Translation")
@@ -71,11 +49,15 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Tile")
 		bool reserved = false;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "TileMap")
+		ATileMap* tilemap;
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
 public:	
+
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 };

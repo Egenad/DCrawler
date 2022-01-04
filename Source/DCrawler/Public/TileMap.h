@@ -4,23 +4,11 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+
 #include "Tile.h"
-#include "BaseEnemy.h"
+#include "Utility.h"
+
 #include "TileMap.generated.h"
-
-USTRUCT(BlueprintType)
-struct FDirectionData {
-
-	GENERATED_BODY()
-
-public:
-
-	UPROPERTY(BlueprintReadOnly)
-		FCoord direction;
-
-	UPROPERTY(BlueprintReadOnly)
-		FRotator rotation;
-};
 
 UCLASS()
 class DCRAWLER_API ATileMap : public AActor
@@ -31,13 +19,16 @@ public:
 	// Sets default values for this actor's properties
 	ATileMap();
 
-	UFUNCTION(BlueprintCallable, CallInEditor, Category = "Tilemap")
+	UFUNCTION(BlueprintCallable, CallInEditor, Category = "Settings")
 		void GenerateTilemap();
 
-	UFUNCTION(BlueprintCallable, CallInEditor, Category = "Tilemap")
+	UFUNCTION(BlueprintCallable, CallInEditor, Category = "Settings")
 		void ResetTilemap();
+
+	UFUNCTION(BlueprintCallable, CallInEditor, Category = "Settings")
+		void EnlargeTilemapX();
 	
-	UFUNCTION(BlueprintCallable, CallInEditor, Category = "Tilemap")
+	UFUNCTION(BlueprintCallable, Category = "Tilemap")
 		FCoord TransformWorldLocationToCoordinate(FVector location);
 
 	UFUNCTION(BlueprintCallable, Category = "Tilemap")
@@ -50,7 +41,7 @@ public:
 		TSubclassOf<ATile> GetTileClassByType(TEnumAsByte<TileType> tile_type);
 
 	UFUNCTION(BlueprintCallable, Category = "Tilemap")
-		ATile* GenerateTileType(FTransform transform, TEnumAsByte<TileType> tile_type);
+		ATile* GenerateTileType(FCoord coordinates, FTransform transform, TEnumAsByte<TileType> tile_type);
 
 	UFUNCTION(BlueprintCallable, Category = "Tilemap")
 		void TeleportPlayerToTile(FCoord coordinates);
@@ -63,12 +54,6 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "Player")
 		void InitPlayerRotation(FRotator new_rotation);
-	
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Tilemap")
-		int width = 5;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Tilemap")
-		int TileSize = 400;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Tilemap")
 		TArray<ATile*> tiles;
@@ -76,18 +61,29 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Tilemap")
 		TMap<TEnumAsByte<TileType>, TSubclassOf<ATile>> type_map;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Enemies")
-		TMap<FString, TSubclassOf<ABaseEnemy>> enemy_map;
-
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Tilemap")
 		TMap<TEnumAsByte<Directions>, FDirectionData> direction_map;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Tilemap")
 		FDirectionData player_start {FCoord{0, 0}, FRotator(0.0,0.0,0.0)};
 
+
+	// Getters
+
+	UFUNCTION(BlueprintCallable, Category = "Get")
+		int GetTilemapWidth();
+
+	UFUNCTION(BlueprintCallable, Category = "Get")
+		int GetTileSize();
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+
+private:
+
+	int width = 5;
+	int TileSize = 400;
 
 public:	
 	// Called every frame

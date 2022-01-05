@@ -51,15 +51,18 @@ void ATileMap::Tick(float DeltaTime)
 
 void ATileMap::GenerateTilemap() {
 
+	width = default_width;
+	height = default_height;
+
 	if (!type_map.IsEmpty()) {
 
 		FCoord tile_position;
 		tile_position.c_x = 0;
 		tile_position.c_y = 0;
 
-		//Generate row
-		for (int i = 0; i < width; i++) {
-			//Generate column
+		//Generate rows
+		for (int i = 0; i < height; i++) {
+			//Generate columns
 			for (int j = 0; j < width; j++) {
 
 				FVector location(tile_position.c_x, tile_position.c_y, 0.0f);
@@ -72,7 +75,7 @@ void ATileMap::GenerateTilemap() {
 
 				TEnumAsByte<TileType> tile_type = TT_Terrain;
 
-				if (tile_position.c_x == 0 || j == (width - 1) || tile_position.c_y == 0 || i == (width-1)) {
+				if (tile_position.c_x == 0 || j == (width - 1) || tile_position.c_y == 0 || i == (height-1)) {
 					tile_type = TT_Wall;
 				}
 
@@ -92,25 +95,6 @@ void ATileMap::GenerateTilemap() {
 		for (int i = 0; i < tiles.Num(); i++) {
 			SetTileNeighbours(tiles[i]);
 		}
-
-		// Temporary Code ////////////////////////////////////////////////
-		// To do: once the tilemap is created, load and create all enemies
-		/*
-		FActorSpawnParameters spawn_params;
-
-		TSubclassOf<ABaseEnemy>* new_enemy_class = enemy_map.Find("Skeleton");
-		FCoord new_coord{ 5,5 };
-
-		int index = GetTileByLocation(new_coord);
-
-		if (new_enemy_class != nullptr) {
-			ABaseEnemy* new_enemy = GetWorld()->SpawnActor<ABaseEnemy>(*new_enemy_class, FVector(new_coord.c_x * TileSize, new_coord.c_y * TileSize, 0), FRotator(0, 0, 0), spawn_params);
-			new_enemy->current_tile = tiles[index];
-			new_enemy->current_tile->reserved = true;
-		}
-		
-		//////////////////////////////////////////////////////////////////*/
-
 	}
 }
 
@@ -139,7 +123,7 @@ int32 ATileMap::GetTileByLocation(FCoord coordinates) {
 
 	int index = ((width * coordinates.c_y) + coordinates.c_x);
 
-	if (index >= 0 && index < (width * width)) {
+	if (index >= 0 && index < (width * height)) {
 		return index;
 	}
 
@@ -183,6 +167,8 @@ void ATileMap::ResetTilemap() {
 		}
 		tiles.Empty();
 	}
+
+	GenerateTilemap();
 }
 
 FCoord ATileMap::TransformWorldLocationToCoordinate(FVector location){
@@ -225,61 +211,131 @@ void ATileMap::SetTileNeighbours(ATile* tile) {
 
 void ATileMap::EnlargeTilemapX() {
 	
-	/*
-		x = new tile
-		o = existing tile
-		width = 3
-		
-		 0123
-		0ooox
-		1ooox
-		2ooox
-	*/
+	if (tiles.Num() > 0) {
 
-	TArray<ATile*> new_tiles;
+		/*
+			x = new tile
+			o = existing tile
+			width = 3
 
-	FCoord tile_position;
-	tile_position.c_x = 0;
-	tile_position.c_y = 0;
+			 0123
+			0ooox
+			1ooox
+			2ooox
+		*/
 
-	for (int i = 0; i < width; i++) {
-		for (int j = 0; j < width + 1; j++) {
-			
-			if (j != width) {
-				
-				// This tile already exists: add it to the new array
+		int new_x = tiles[width-1]->GetActorLocation().X + TileSize;
 
-				int index = GetTileByLocation(FCoord{ j, i });
-				if(index != -1) new_tiles.Add(tiles[index]);
-			}
-			else {
+		TArray<ATile*> new_tiles;
 
-				// This tile doesn't exists: create it and add it
-
-				FVector location(tile_position.c_x, tile_position.c_y, 0.0f);
-				FRotator rotation(0.0f, 0.0f, 0.0f);
-
-				FTransform transform;
-				transform.SetLocation(location);
-				transform.SetRotation(rotation.Quaternion());
-				transform.SetScale3D(FVector(1.0f, 1.0f, 1.0f));
-
-				TEnumAsByte<TileType> tile_type = TT_Terrain;
-
-				ATile* new_tile = GenerateTileType(FCoord{j,i}, transform, tile_type);
-
-				new_tiles.Add(new_tile);
-
-			}
-			tile_position.c_x += TileSize;
-		}
+		FCoord tile_position;
 		tile_position.c_x = 0;
-		tile_position.c_y += TileSize;
+		tile_position.c_y = 0;
+
+		for (int i = 0; i < height; i++) {
+			for (int j = 0; j < width + 1; j++) {
+
+				if (j != width) {
+
+					// This tile already exists: add it to the new array
+
+					int index = GetTileByLocation(FCoord{ j, i });
+					if (index != -1) new_tiles.Add(tiles[index]);
+				}
+				else {
+
+					// This tile doesn't exists: create it and add it
+
+					FVector location(new_x, tile_position.c_y, 0.0f);
+					FRotator rotation(0.0f, 0.0f, 0.0f);
+
+					FTransform transform;
+					transform.SetLocation(location);
+					transform.SetRotation(rotation.Quaternion());
+					transform.SetScale3D(FVector(1.0f, 1.0f, 1.0f));
+
+					TEnumAsByte<TileType> tile_type = TT_Terrain;
+
+					ATile* new_tile = GenerateTileType(FCoord{ j,i }, transform, tile_type);
+
+					new_tiles.Add(new_tile);
+
+				}
+			}
+			tile_position.c_y += TileSize;
+		}
+
+		tiles = new_tiles;
+
+		width += 1;
+
 	}
+}
 
-	tiles = new_tiles;
+void ATileMap::EnlargeTilemapMX() {
 
-	width += 1;
+	if (tiles.Num() > 0) {
+
+		/*
+			x = new tile
+			o = existing tile
+			width = 3
+
+			 0123
+			0xooo
+			1xooo
+			2xooo
+		*/
+
+		TArray<ATile*> new_tiles;
+
+		FCoord tile_position;
+		tile_position.c_x = 0;
+		tile_position.c_y = 0;
+
+		int new_x = tiles[0]->GetActorLocation().X - TileSize;
+
+		for (int i = 0; i < height; i++) {
+			for (int j = 0; j < width + 1; j++) {
+
+				if (j != 0) {
+
+					// This tile already exists: add it to the new array
+
+					int index = GetTileByLocation(FCoord{ (j - 1), i });
+					if (index != -1) { 
+						tiles[index]->coordinates = FCoord{j,i};
+						new_tiles.Add(tiles[index]); 
+					}
+				}
+				else {
+
+					// This tile doesn't exists: create it and add it
+
+					FVector location(new_x, tile_position.c_y, 0.0f);
+					FRotator rotation(0.0f, 0.0f, 0.0f);
+
+					FTransform transform;
+					transform.SetLocation(location);
+					transform.SetRotation(rotation.Quaternion());
+					transform.SetScale3D(FVector(1.0f, 1.0f, 1.0f));
+
+					TEnumAsByte<TileType> tile_type = TT_Terrain;
+
+					ATile* new_tile = GenerateTileType(FCoord{ j,i }, transform, tile_type);
+
+					new_tiles.Add(new_tile);
+
+				}
+			}
+			tile_position.c_y += TileSize;
+		}
+
+		tiles = new_tiles;
+
+		width += 1;
+
+	}
 }
 
 void ATileMap::TeleportPlayerToTile(FCoord coordinates) {

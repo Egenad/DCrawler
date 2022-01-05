@@ -28,6 +28,9 @@ public:
 	UFUNCTION(BlueprintCallable, CallInEditor, Category = "Settings")
 		void EnlargeTilemapX();
 	
+	UFUNCTION(BlueprintCallable, CallInEditor, Category = "Settings")
+		void EnlargeTilemapMX();
+
 	UFUNCTION(BlueprintCallable, Category = "Tilemap")
 		FCoord TransformWorldLocationToCoordinate(FVector location);
 
@@ -67,6 +70,11 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Tilemap")
 		FDirectionData player_start {FCoord{0, 0}, FRotator(0.0,0.0,0.0)};
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Settings")
+	int default_width = 5;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Settings")
+	int default_height = 5;
 
 	// Getters
 
@@ -83,6 +91,7 @@ protected:
 private:
 
 	int width = 5;
+	int height = 5;
 	int TileSize = 400;
 
 public:	

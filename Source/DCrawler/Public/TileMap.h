@@ -31,6 +31,12 @@ public:
 	UFUNCTION(BlueprintCallable, CallInEditor, Category = "Settings")
 		void EnlargeTilemapMX();
 
+	UFUNCTION(BlueprintCallable, CallInEditor, Category = "Settings")
+		void EnlargeTilemapY();
+
+	UFUNCTION(BlueprintCallable, CallInEditor, Category = "Settings")
+		void EnlargeTilemapMY();
+
 	UFUNCTION(BlueprintCallable, Category = "Tilemap")
 		FCoord TransformWorldLocationToCoordinate(FVector location);
 

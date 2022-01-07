@@ -225,12 +225,9 @@ void ATileMap::EnlargeTilemapX() {
 		*/
 
 		int new_x = tiles[width-1]->GetActorLocation().X + TileSize;
-
+		int new_y = tiles[width - 1]->GetActorLocation().Y;
+	
 		TArray<ATile*> new_tiles;
-
-		FCoord tile_position;
-		tile_position.c_x = 0;
-		tile_position.c_y = 0;
 
 		for (int i = 0; i < height; i++) {
 			for (int j = 0; j < width + 1; j++) {
@@ -246,7 +243,7 @@ void ATileMap::EnlargeTilemapX() {
 
 					// This tile doesn't exists: create it and add it
 
-					FVector location(new_x, tile_position.c_y, 0.0f);
+					FVector location(new_x, new_y, 0.0f);
 					FRotator rotation(0.0f, 0.0f, 0.0f);
 
 					FTransform transform;
@@ -262,12 +259,75 @@ void ATileMap::EnlargeTilemapX() {
 
 				}
 			}
-			tile_position.c_y += TileSize;
+			new_y += TileSize;
 		}
 
 		tiles = new_tiles;
 
 		width += 1;
+
+	}
+}
+
+void ATileMap::EnlargeTilemapY() {
+
+	if (tiles.Num() > 0) {
+
+		/*
+			y = new tile
+			o = existing tile
+			width = 3
+
+			 012
+			0ooo
+			1ooo
+			2ooo
+			3yyy
+		*/
+
+		int new_y = tiles[(width*height) - 1]->GetActorLocation().Y + TileSize;
+		int new_x = tiles[0]->GetActorLocation().X;
+		int last_x = new_x;
+
+		TArray<ATile*> new_tiles;
+
+		for (int i = 0; i < height + 1; i++) {
+			for (int j = 0; j < width; j++) {
+
+				if (i != height) {
+
+					// This tile already exists: add it to the new array
+
+					int index = GetTileByLocation(FCoord{ j, i });
+					if (index != -1) new_tiles.Add(tiles[index]);
+				}
+				else {
+
+					// This tile doesn't exists: create it and add it
+
+					FVector location(new_x, new_y, 0.0f);
+					FRotator rotation(0.0f, 0.0f, 0.0f);
+
+					FTransform transform;
+					transform.SetLocation(location);
+					transform.SetRotation(rotation.Quaternion());
+					transform.SetScale3D(FVector(1.0f, 1.0f, 1.0f));
+
+					TEnumAsByte<TileType> tile_type = TT_Terrain;
+
+					ATile* new_tile = GenerateTileType(FCoord{ j,i }, transform, tile_type);
+
+					new_tiles.Add(new_tile);
+
+				}
+				new_x += TileSize;
+			}
+			new_x = last_x;
+		}
+
+		tiles = new_tiles;
+
+		height += 1;
 
 	}
 }
@@ -294,6 +354,7 @@ void ATileMap::EnlargeTilemapMX() {
 		tile_position.c_y = 0;
 
 		int new_x = tiles[0]->GetActorLocation().X - TileSize;
+		int new_y = tiles[0]->GetActorLocation().Y;
 
 		for (int i = 0; i < height; i++) {
 			for (int j = 0; j < width + 1; j++) {
@@ -312,7 +373,7 @@ void ATileMap::EnlargeTilemapMX() {
 
 					// This tile doesn't exists: create it and add it
 
-					FVector location(new_x, tile_position.c_y, 0.0f);
+					FVector location(new_x, new_y, 0.0f);
 					FRotator rotation(0.0f, 0.0f, 0.0f);
 
 					FTransform transform;
@@ -328,12 +389,77 @@ void ATileMap::EnlargeTilemapMX() {
 
 				}
 			}
-			tile_position.c_y += TileSize;
+			new_y += TileSize;
 		}
 
 		tiles = new_tiles;
 
 		width += 1;
+
+	}
+}
+
+void ATileMap::EnlargeTilemapMY() {
+	if (tiles.Num() > 0) {
+
+		/*
+			y = new tile
+			o = existing tile
+			width = 3
+
+			 012
+			0yyy
+			1ooo
+			2ooo
+			3ooo
+		*/
+
+		TArray<ATile*> new_tiles;
+
+		int new_y = tiles[0]->GetActorLocation().Y - TileSize;
+		int last_x = tiles[0]->GetActorLocation().X;
+		int new_x = last_x;
+
+		for (int i = 0; i < height + 1; i++) {
+			for (int j = 0; j < width; j++) {
+
+				if (i != 0) {
+
+					// This tile already exists: add it to the new array
+
+					int index = GetTileByLocation(FCoord{ j, i-1 });
+					if (index != -1) {
+						tiles[index]->coordinates = FCoord{ j,i };
+						new_tiles.Add(tiles[index]);
+					}
+				}
+				else {
+
+					// This tile doesn't exists: create it and add it
+
+					FVector location(new_x, new_y, 0.0f);
+					FRotator rotation(0.0f, 0.0f, 0.0f);
+
+					FTransform transform;
+					transform.SetLocation(location);
+					transform.SetRotation(rotation.Quaternion());
+					transform.SetScale3D(FVector(1.0f, 1.0f, 1.0f));
+
+					TEnumAsByte<TileType> tile_type = TT_Terrain;
+
+					ATile* new_tile = GenerateTileType(FCoord{ j,i }, transform, tile_type);
+
+					new_tiles.Add(new_tile);
+
+				}
+				new_x += TileSize;
+			}
+			new_x = last_x;
+		}
+
+		tiles = new_tiles;
+
+		height += 1;
 
 	}
 }

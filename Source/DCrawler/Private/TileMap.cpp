@@ -254,12 +254,17 @@ void ATileMap::EnlargeTilemapX() {
 					TEnumAsByte<TileType> tile_type = TT_Terrain;
 
 					ATile* new_tile = GenerateTileType(FCoord{ j,i }, transform, tile_type);
+					
 
 					new_tiles.Add(new_tile);
 
 				}
 			}
 			new_y += TileSize;
+		}
+
+		for (int i = 0; i < new_tiles.Num(); i++) {
+			SetTileNeighbours(new_tiles[i]);
 		}
 
 		tiles = new_tiles;
@@ -323,6 +328,10 @@ void ATileMap::EnlargeTilemapY() {
 				new_x += TileSize;
 			}
 			new_x = last_x;
+		}
+
+		for (int i = 0; i < new_tiles.Num(); i++) {
+			SetTileNeighbours(new_tiles[i]);
 		}
 
 		tiles = new_tiles;
@@ -392,10 +401,13 @@ void ATileMap::EnlargeTilemapMX() {
 			new_y += TileSize;
 		}
 
+		for (int i = 0; i < new_tiles.Num(); i++) {
+			SetTileNeighbours(new_tiles[i]);
+		}
+
 		tiles = new_tiles;
 
 		width += 1;
-
 	}
 }
 
@@ -455,6 +467,10 @@ void ATileMap::EnlargeTilemapMY() {
 				new_x += TileSize;
 			}
 			new_x = last_x;
+		}
+
+		for (int i = 0; i < new_tiles.Num(); i++) {
+			SetTileNeighbours(new_tiles[i]);
 		}
 
 		tiles = new_tiles;

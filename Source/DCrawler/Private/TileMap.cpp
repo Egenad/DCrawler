@@ -263,14 +263,12 @@ void ATileMap::EnlargeTilemapX() {
 			new_y += TileSize;
 		}
 
+		tiles = new_tiles;
+		width += 1;
+
 		for (int i = 0; i < new_tiles.Num(); i++) {
 			SetTileNeighbours(new_tiles[i]);
 		}
-
-		tiles = new_tiles;
-
-		width += 1;
-
 	}
 }
 
@@ -330,14 +328,12 @@ void ATileMap::EnlargeTilemapY() {
 			new_x = last_x;
 		}
 
+		tiles = new_tiles;
+		height += 1;
+
 		for (int i = 0; i < new_tiles.Num(); i++) {
 			SetTileNeighbours(new_tiles[i]);
 		}
-
-		tiles = new_tiles;
-
-		height += 1;
-
 	}
 }
 
@@ -401,13 +397,12 @@ void ATileMap::EnlargeTilemapMX() {
 			new_y += TileSize;
 		}
 
+		tiles = new_tiles;
+		width += 1;
+
 		for (int i = 0; i < new_tiles.Num(); i++) {
 			SetTileNeighbours(new_tiles[i]);
 		}
-
-		tiles = new_tiles;
-
-		width += 1;
 	}
 }
 
@@ -469,14 +464,12 @@ void ATileMap::EnlargeTilemapMY() {
 			new_x = last_x;
 		}
 
+		tiles = new_tiles;
+		height += 1;
+
 		for (int i = 0; i < new_tiles.Num(); i++) {
 			SetTileNeighbours(new_tiles[i]);
 		}
-
-		tiles = new_tiles;
-
-		height += 1;
-
 	}
 }
 

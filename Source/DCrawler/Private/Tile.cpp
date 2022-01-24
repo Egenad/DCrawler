@@ -30,6 +30,32 @@ void ATile::ChangeTileType(){
 		if (new_tile != nullptr) {
 			new_tile->tilemap = tilemap;
 			new_tile->neighbours = neighbours;
+
+			//Set this tile to the neighbours
+
+			TEnumAsByte<Directions> direction;
+
+			for (int i = 0; i < D_END; i++) {
+				
+				direction = static_cast<Directions>(i);
+				ATile** tile_neighbour = neighbours.Find(direction);
+
+				if (tile_neighbour) {
+
+					ATile* tile = *tile_neighbour;
+
+					int inverse = i + 2;
+
+					if (inverse >= D_END) {
+						inverse -= D_END;
+					}
+
+					TEnumAsByte<Directions> inverse_direction = static_cast<Directions>(inverse);
+
+					tile->neighbours.Add(inverse_direction, new_tile);
+				}
+			}
+
 			new_tile->coordinates = coordinates;
 			new_tile->type = type;
 

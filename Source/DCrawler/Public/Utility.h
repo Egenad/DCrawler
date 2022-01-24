@@ -17,7 +17,8 @@ enum TileType {
 	TT_Void		UMETA(DisplayName = "Void"),
 	TT_Terrain	UMETA(DisplayName = "Terrain"),
 	TT_Wall		UMETA(DisplayName = "Wall"),
-	TT_Ice		UMETA(DisplayName = "Ice")
+	TT_Ice		UMETA(DisplayName = "Ice"),
+	TT_Gate		UMETA(DisplayName = "Gate")
 };
 
 USTRUCT(BlueprintType)

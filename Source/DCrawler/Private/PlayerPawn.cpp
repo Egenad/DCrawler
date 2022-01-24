@@ -154,7 +154,36 @@ void APlayerPawn::MoveForward() {
 
 void APlayerPawn::TurnBack() {
 
-	if (!moving) {
+	int focused = focused_tile.GetValue();
+	int last_focused = focused;
+	focused += 2;
+
+	if (focused >= D_END) {
+		focused -= D_END;
+	}
+
+	focused_tile = static_cast<Directions>(focused);
+
+	ATile* next_tile = *current_tile->neighbours.Find(focused_tile);
+
+	if (next_tile && !moving) {
+		if (next_tile->can_step_up && !next_tile->reserved) {
+
+			next_tile->reserved = true;
+			current_tile->reserved = false;
+
+			actual_location = GetActorLocation();
+			target_location = next_tile->GetActorLocation();
+			moving = true;
+			current_tile = next_tile;
+
+			forward_timeline.PlayFromStart();
+		}
+	}
+
+	focused_tile = static_cast<Directions>(last_focused);
+
+	/*if (!moving) {
 		moving = true;
 
 		actual_rotation = target_rotation = GetActorRotation();
@@ -169,5 +198,5 @@ void APlayerPawn::TurnBack() {
 
 		focused_tile = static_cast<Directions>(focused);
 		turn_timeline.PlayFromStart();
-	}
+	}*/
 }

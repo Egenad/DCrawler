@@ -37,6 +37,10 @@ void ATileMap::BeginPlay()
 	
 	//GenerateTilemap();
 
+	FString f = "";
+	f.AppendInt(width);
+	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, f);
+
 	TeleportPlayerToTile(player_start.direction);
 	InitPlayerRotation(player_start.rotation);
 
@@ -543,6 +547,17 @@ void ATileMap::InitPlayerRotation(FRotator new_rotation) {
 		else {	// Invalid rotation
 			player->SetActorRotation(FRotator(0.0,0.0,-90.0));
 			player->focused_tile = D_UP;
+		}
+	}
+}
+
+void ATileMap::RecalculeWidthHeight() {
+	if (tiles.Num() > 0) {
+		ATile* last_tile = tiles[tiles.Num() - 1];
+
+		if (last_tile) {
+			width = last_tile->coordinates.c_x + 1;
+			height = last_tile->coordinates.c_y + 1;
 		}
 	}
 }

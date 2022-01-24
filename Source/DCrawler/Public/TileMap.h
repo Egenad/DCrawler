@@ -22,8 +22,11 @@ public:
 	UFUNCTION(BlueprintCallable, CallInEditor, Category = "Settings")
 		void GenerateTilemap();
 
-	UFUNCTION(BlueprintCallable, CallInEditor, Category = "Settings")
+	UFUNCTION(BlueprintCallable, CallInEditor, Category = "Reset")
 		void ResetTilemap();
+
+	UFUNCTION(BlueprintCallable, CallInEditor, Category = "Reset")
+		void RecalculeWidthHeight();
 
 	UFUNCTION(BlueprintCallable, CallInEditor, Category = "Settings")
 		void EnlargeTilemapX();

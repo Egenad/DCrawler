@@ -15,8 +15,8 @@ public:
 	// Sets default values for this actor's properties
 	AInteractive();
 
-	UFUNCTION(BlueprintCallable, Category = "Interface")
-	virtual void Execute();
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "Interface")
+	void ExecuteInteraction();
 
 protected:
 	// Called when the game starts or when spawned

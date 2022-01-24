@@ -119,7 +119,7 @@ void APlayerPawn::Interact(){
 
 	if (next_tile) {
 		if (next_tile->interactive) {
-			next_tile->interactive->Execute();
+			next_tile->interactive->ExecuteInteraction();
 		}
 	}
 }

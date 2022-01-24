@@ -7,6 +7,7 @@
 
 #include "Containers/Array.h"
 #include "Utility.h"
+#include "Interactive.h"
 
 #include "Tile.generated.h"
 
@@ -51,6 +52,9 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "TileMap")
 		ATileMap* tilemap;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Interactive")
+		AInteractive* interactive;
 
 protected:
 	// Called when the game starts or when spawned

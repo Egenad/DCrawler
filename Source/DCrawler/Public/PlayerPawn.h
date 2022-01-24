@@ -33,7 +33,7 @@ public:
 		void TurnRight(bool right);
 
 	UFUNCTION(BlueprintCallable, Category = "Action")
-		void Attack();
+		void Interact();
 
 	UFUNCTION(Category = "TurnTimeline")
 		void TurnTimelineProgress(float alpha);

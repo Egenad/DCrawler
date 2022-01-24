@@ -72,6 +72,7 @@ void APlayerPawn::SetupPlayerInputComponent(UInputComponent* PlayerInputComponen
 	PlayerInputComponent->BindAction("MoveBack", IE_Pressed, this, &APlayerPawn::TurnBack);
 	PlayerInputComponent->BindAction<FTurnDelegate>("TurnRight", IE_Pressed, this, &APlayerPawn::TurnRight, true);
 	PlayerInputComponent->BindAction<FTurnDelegate>("TurnLeft", IE_Pressed, this, &APlayerPawn::TurnRight, false);
+	PlayerInputComponent->BindAction("Interact", IE_Pressed, this, &APlayerPawn::Interact);
 }
 
 void APlayerPawn::TurnRight(bool right) {
@@ -108,9 +109,19 @@ void APlayerPawn::TurnRight(bool right) {
 
 }
 
-void APlayerPawn::Attack(){
+void APlayerPawn::Interact(){
 	//if my turn
-		
+	
+
+	//Check if the focused tile has any interactive object
+
+	ATile* next_tile = *current_tile->neighbours.Find(focused_tile);
+
+	if (next_tile) {
+		if (next_tile->interactive) {
+			next_tile->interactive->Execute();
+		}
+	}
 }
 
 void APlayerPawn::TurnTimelineProgress(float alpha)

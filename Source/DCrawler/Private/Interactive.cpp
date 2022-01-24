@@ -25,3 +25,7 @@ void AInteractive::Tick(float DeltaTime)
 
 }
 
+void AInteractive::Execute() {
+
+}
+

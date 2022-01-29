@@ -8,6 +8,7 @@
 #include "Containers/Array.h"
 #include "Utility.h"
 #include "Interactive.h"
+#include "MinimapTileRepresentation.h"
 
 #include "Tile.generated.h"
 
@@ -25,12 +26,27 @@ public:
 	// Functions
 
 	UFUNCTION(BlueprintCallable, CallInEditor, Category = "Type")
-		void ChangeTileType();
+		void ChangeTileTypeByType();
+
+	UFUNCTION(BlueprintCallable, CallInEditor, Category = "Type")
+		void ChangeTileTypeByClass();
+
+	UFUNCTION(Category = "Type")
+		void ChangeTile(TSubclassOf<ATile> new_type);
+
+	UFUNCTION(BlueprintCallable, Category = "Minimap")
+		void SeeTile();
+
+	UFUNCTION(BlueprintCallable, Category = "Minimap")
+		AMinimapTileRepresentation* CreateMinimapRepresentation();
 
 	// Variables
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Type")
 		TEnumAsByte<TileType> type;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Type")
+		TSubclassOf<ATile> to_type;
 
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = "Translation")
 		USceneComponent* SceneComponent;
@@ -38,7 +54,7 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Tile")
 		FCoord coordinates;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category ="Tile")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category ="Tile")
 		TMap<TEnumAsByte<Directions>, ATile*> neighbours;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Tile")
@@ -50,11 +66,20 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Tile")
 		bool reserved = false;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Minimap")
+		bool seen = false;
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "TileMap")
 		ATileMap* tilemap;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Interactive")
 		AInteractive* interactive;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Minimap")
+		AMinimapTileRepresentation* minimap_representation;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Minimap")
+		TSubclassOf<AMinimapTileRepresentation> minimap_rep_type;
 
 protected:
 	// Called when the game starts or when spawned

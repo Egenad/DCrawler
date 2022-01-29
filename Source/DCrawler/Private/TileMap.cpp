@@ -105,17 +105,28 @@ void ATileMap::GenerateTilemap() {
 ATile* ATileMap::GenerateTileType(FCoord coordinates, FTransform transform, TEnumAsByte<TileType> tile_type) {
 
 	FActorSpawnParameters spawn_params;
+	spawn_params.Owner = this;
+
 	TSubclassOf<ATile> tile_class = GetTileClassByType(tile_type);
 
 	if (tile_class != nullptr) {
+		
+		// Spawn tile
 		ATile* new_tile = GetWorld()->SpawnActor<ATile>(tile_class, transform.GetLocation(), transform.GetRotation().Rotator(), spawn_params);	//Spawn new tile in world
 		
 		if (new_tile != nullptr) {
+			
+			// Set properties
 			new_tile->coordinates.c_x = coordinates.c_x;
 			new_tile->coordinates.c_y = coordinates.c_y;
 			new_tile->type = tile_type;
 			new_tile->tilemap = this;
 
+			// Spawn its minimap representation
+			
+			new_tile->CreateMinimapRepresentation();
+
+			// Return the tile ptr
 			return new_tile;
 		}
 	}
@@ -164,9 +175,12 @@ void ATileMap::ResetTilemap() {
 	if (tiles.Num() > 0) {
 		for (int i = 0; i < tiles.Num(); i++) {	
 			if (IsValid(tiles[i])) {
-				if (tiles[i]->Destroy()) {
+
+				if(tiles[i]->minimap_representation->IsValidLowLevel())
+					tiles[i]->minimap_representation->Destroy();
+
+				if(tiles[i]->Destroy())
 					tiles[i] = nullptr;
-				}
 			}
 		}
 		tiles.Empty();

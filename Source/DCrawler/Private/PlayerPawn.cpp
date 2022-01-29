@@ -105,8 +105,10 @@ void APlayerPawn::TurnRight(bool right) {
 
 		turn_timeline.PlayFromStart();
 
+		//Set next tile to seen
+		ATile* next_tile = *current_tile->neighbours.Find(focused_tile);
+		if(next_tile) next_tile->SeeTile();
 	}
-
 }
 
 void APlayerPawn::Interact(){
@@ -159,6 +161,10 @@ void APlayerPawn::MoveForward() {
 			current_tile = next_tile;
 
 			forward_timeline.PlayFromStart();
+
+			//Set next tile to seen
+			next_tile = *current_tile->neighbours.Find(focused_tile);
+			if(next_tile) next_tile->SeeTile();
 		}
 	}
 }
@@ -189,6 +195,10 @@ void APlayerPawn::TurnBack() {
 			current_tile = next_tile;
 
 			forward_timeline.PlayFromStart();
+
+			//Set next tile to seen
+			next_tile = *current_tile->neighbours.Find(focused_tile);
+			if(next_tile) next_tile->SeeTile();
 		}
 	}
 

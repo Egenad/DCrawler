@@ -13,12 +13,13 @@ enum Directions {
 
 UENUM()
 enum TileType {
-	TT_Null		UMETA(DisplayName = "Null"),
-	TT_Void		UMETA(DisplayName = "Void"),
-	TT_Terrain	UMETA(DisplayName = "Terrain"),
-	TT_Wall		UMETA(DisplayName = "Wall"),
-	TT_Ice		UMETA(DisplayName = "Ice"),
-	TT_Gate		UMETA(DisplayName = "Gate")
+	TT_Null			UMETA(DisplayName = "Null"),
+	TT_Void			UMETA(DisplayName = "Void"),
+	TT_Terrain		UMETA(DisplayName = "Terrain"),
+	TT_Wall			UMETA(DisplayName = "Wall"),
+	TT_Ice			UMETA(DisplayName = "Ice"),
+	TT_Gate			UMETA(DisplayName = "Gate"),
+	TT_Decoration	UMETA(DisplayName = "Decoration")
 };
 
 USTRUCT(BlueprintType)

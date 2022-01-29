@@ -14,35 +14,49 @@ ATile::ATile()
 	SetRootComponent(SceneComponent);
 }
 
-void ATile::ChangeTileType(){
+void ATile::ChangeTileTypeByType(){
 
 	//Spawn a new tile in my exact location of desired new type
 
-	FVector location_to_spawn = this->GetActorLocation();
-
-	FActorSpawnParameters spawn_params;
 	TSubclassOf<ATile> new_type = tilemap->GetTileClassByType(type);
 
 	if (new_type != nullptr) {
+		ChangeTile(new_type);
+	}
+}
 
-		ATile* new_tile = GetWorld()->SpawnActor<ATile>(new_type, location_to_spawn, FRotator(0, 0, 0), spawn_params);
 
-		if (new_tile != nullptr) {
-			new_tile->tilemap = tilemap;
-			new_tile->neighbours = neighbours;
+void ATile::ChangeTileTypeByClass() {
+	if (to_type) {
+		ChangeTile(to_type);
+	}
+}
 
-			//Set this tile to the neighbours
+void ATile::ChangeTile(TSubclassOf<ATile> new_type) {
 
-			TEnumAsByte<Directions> direction;
+	FActorSpawnParameters spawn_params;
+	FVector location_to_spawn = this->GetActorLocation();
 
-			for (int i = 0; i < D_END; i++) {
-				
-				direction = static_cast<Directions>(i);
-				ATile** tile_neighbour = neighbours.Find(direction);
+	ATile* new_tile = GetWorld()->SpawnActor<ATile>(new_type, location_to_spawn, FRotator(0, 0, 0), spawn_params);
 
-				if (tile_neighbour) {
+	if (new_tile != nullptr) {
+		new_tile->tilemap = tilemap;
+		new_tile->neighbours = neighbours;
 
-					ATile* tile = *tile_neighbour;
+		//Set this tile to the neighbours
+
+		TEnumAsByte<Directions> direction;
+
+		for (int i = 0; i < D_END; i++) {
+
+			direction = static_cast<Directions>(i);
+			ATile** tile_neighbour = neighbours.Find(direction);
+
+			if (tile_neighbour) {
+
+				ATile* tile = *tile_neighbour;
+
+				if (tile) {
 
 					int inverse = i + 2;
 
@@ -55,21 +69,29 @@ void ATile::ChangeTileType(){
 					tile->neighbours.Add(inverse_direction, new_tile);
 				}
 			}
-
-			new_tile->coordinates = coordinates;
-			new_tile->type = type;
-
-			// Search in the tilemap the actual tile and replace it with the new one
-
-			int index = tilemap->GetTileByLocation(coordinates);
-
-			if (index != -1) {
-				tilemap->tiles[index] = new_tile;
-			}
-
-			// Lastly, destroy this actor
-			this->Destroy();
 		}
+
+		new_tile->coordinates = coordinates;
+		new_tile->type = type;
+		new_tile->interactive = interactive;
+
+		if (minimap_representation) {
+			new_tile->minimap_representation = minimap_representation;
+		}
+		else {
+			new_tile->minimap_representation = CreateMinimapRepresentation();
+		}
+
+		// Search in the tilemap the actual tile and replace it with the new one
+
+		int index = tilemap->GetTileByLocation(coordinates);
+
+		if (index != -1) {
+			tilemap->tiles[index] = new_tile;
+		}
+
+		// Lastly, destroy this actor
+		this->Destroy();
 	}
 }
 
@@ -85,5 +107,42 @@ void ATile::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+}
+
+void ATile::SeeTile() {
+	if (!seen && minimap_representation) {
+
+		seen = true;
+		minimap_representation->TileHasBeenSeen();
+	}
+
+	//Check neighbours
+
+	TEnumAsByte<Directions> direction;
+
+	for (int i = 0; i < D_END; i++) {
+		direction = static_cast<Directions>(i);
+		ATile** tile_neighbour = neighbours.Find(direction);
+
+		if (tile_neighbour) {
+
+			ATile* tile = *tile_neighbour;
+
+			if (tile && tile->minimap_representation) {
+				tile->seen = true;
+				tile->minimap_representation->TileHasBeenSeen();
+			}
+		}
+	}
+}
+
+AMinimapTileRepresentation* ATile::CreateMinimapRepresentation() {
+
+	FActorSpawnParameters spawn_params;
+
+	FVector location_to_spawn = GetActorLocation();
+	location_to_spawn.Z += tilemap->minimap_Z_offset;
+	minimap_representation = GetWorld()->SpawnActor<AMinimapTileRepresentation>(minimap_rep_type, location_to_spawn, FRotator(0, 0, 0), spawn_params);
+	return minimap_representation;
 }
 

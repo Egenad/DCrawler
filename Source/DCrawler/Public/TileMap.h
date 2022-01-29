@@ -85,6 +85,9 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Settings")
 	int default_height = 5;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Settings")
+		int minimap_Z_offset = -2000;
+
 	// Getters
 
 	UFUNCTION(BlueprintCallable, Category = "Get")

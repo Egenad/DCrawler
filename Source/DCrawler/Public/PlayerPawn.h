@@ -78,8 +78,11 @@ public:
 
 	// Comps
 
-	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = "Translation")
+	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = "Root")
 		USceneComponent* SceneComponent;
+
+	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = "Translation")
+		USceneComponent* PlayerScene;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character")
 		UStaticMeshComponent* character;

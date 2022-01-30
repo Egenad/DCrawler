@@ -62,6 +62,9 @@ public:
 		void SetTileNeighbours(ATile* tile);
 
 	UFUNCTION()
+		void TeleportPlayerToStart();
+
+	UFUNCTION()
 		TEnumAsByte<Directions> GetDirectionByRotation(FRotator rotation, bool &success);
 
 	UFUNCTION(BlueprintCallable, Category = "Player")

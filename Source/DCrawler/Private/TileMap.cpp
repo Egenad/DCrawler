@@ -41,7 +41,7 @@ void ATileMap::BeginPlay()
 	f.AppendInt(width);
 	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, f);
 
-	TeleportPlayerToTile(player_start.direction);
+	TeleportPlayerToStart();
 	InitPlayerRotation(player_start.rotation);
 
 }
@@ -491,6 +491,29 @@ void ATileMap::EnlargeTilemapMY() {
 	}
 }
 
+void ATileMap::TeleportPlayerToStart() {
+	APlayerPawn* player = Cast<APlayerPawn>(UGameplayStatics::GetPlayerPawn(GetWorld(), 0));
+
+	if (player != nullptr) {
+		//Check if there's a tile marked as starting point
+		
+		bool teleported = false;
+
+		for (int i = 0; i < tiles.Num() && !teleported; i++) {
+			if (tiles[i]) {
+				if (tiles[i]->start_tile) {
+					TeleportPlayerToTile(tiles[i]->coordinates);
+					teleported = true;
+				}
+			}
+		}
+
+		if (!teleported) {
+			TeleportPlayerToTile(player_start.direction);
+		}
+	}
+}
+
 void ATileMap::TeleportPlayerToTile(FCoord coordinates) {
 	
 	APlayerPawn* player = Cast<APlayerPawn>(UGameplayStatics::GetPlayerPawn(GetWorld(), 0));
@@ -515,9 +538,23 @@ void ATileMap::TeleportPlayerToTile(FCoord coordinates) {
 			bool found = false;
 
 			for (int i = 0; i < tiles.Num() && !found; i++) {
-				if (tiles[i]->can_start) {
-					found = true;
-					tile = tiles[i];
+				if (tiles[i]) {
+					if (tiles[i]->can_start && tiles[i]->coordinates.c_x == coordinates.c_x && tiles[i]->coordinates.c_y == coordinates.c_y) {
+						found = true;
+						tile = tiles[i];
+					}
+				}
+			}
+
+			// If we couldn't find that tile, get the first abailable in the map.
+			if (!found) {
+				for (int i = 0; i < tiles.Num() && !found; i++) {
+					if (tiles[i]) {
+						if (tiles[i]->can_start) {
+							found = true;
+							tile = tiles[i];
+						}
+					}
 				}
 			}
 		}

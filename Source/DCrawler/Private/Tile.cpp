@@ -12,6 +12,12 @@ ATile::ATile()
 
 	SceneComponent = CreateDefaultSubobject<USceneComponent>(TEXT("DefaultScene"));
 	SetRootComponent(SceneComponent);
+
+	StartSphere = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("StartSignal"));
+	StartSphere->SetupAttachment(RootComponent);
+	StartSphere->SetVisibility(false);
+	StartSphere->SetHiddenInGame(true);
+
 }
 
 void ATile::ChangeTileTypeByType(){
@@ -76,11 +82,10 @@ void ATile::ChangeTile(TSubclassOf<ATile> new_type) {
 		new_tile->interactive = interactive;
 
 		if (minimap_representation) {
-			new_tile->minimap_representation = minimap_representation;
+			minimap_representation->Destroy();
 		}
-		else {
-			new_tile->minimap_representation = CreateMinimapRepresentation();
-		}
+	
+		new_tile->minimap_representation = CreateMinimapRepresentation();
 
 		// Search in the tilemap the actual tile and replace it with the new one
 
@@ -144,5 +149,26 @@ AMinimapTileRepresentation* ATile::CreateMinimapRepresentation() {
 	location_to_spawn.Z += tilemap->minimap_Z_offset;
 	minimap_representation = GetWorld()->SpawnActor<AMinimapTileRepresentation>(minimap_rep_type, location_to_spawn, FRotator(0, 0, 0), spawn_params);
 	return minimap_representation;
+}
+
+void ATile::StartGameHere() {
+
+	// Set this tile as the one we are gonna start the level on
+	if (can_start) {
+		start_tile = true;
+		StartSphere->SetVisibility(true);
+
+		// Check if there was another tile which was marked as the starting point and deselect it
+		TArray<ATile*> tiles = tilemap->tiles;
+
+		for (int i = 0; i < tiles.Num(); i++) {
+			if (tiles[i]) {
+				if (tiles[i]->start_tile && tiles[i] != this) {
+					tiles[i]->start_tile = false;
+					tiles[i]->StartSphere->SetVisibility(false);
+				}
+			}
+		}
+	}
 }
 

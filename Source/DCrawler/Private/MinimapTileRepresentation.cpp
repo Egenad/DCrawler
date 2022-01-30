@@ -32,5 +32,5 @@ void AMinimapTileRepresentation::Tick(float DeltaTime)
 }
 
 void AMinimapTileRepresentation::TileHasBeenSeen() {
-	mesh->SetScalarParameterValueOnMaterials(TEXT("Seen"), 1);
+	mesh->SetVisibility(true);
 }

@@ -40,6 +40,9 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Minimap")
 		AMinimapTileRepresentation* CreateMinimapRepresentation();
 
+	UFUNCTION(BlueprintCallable, CallInEditor, Category = "Start")
+		void StartGameHere();
+
 	// Variables
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Type")
@@ -50,6 +53,9 @@ public:
 
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = "Translation")
 		USceneComponent* SceneComponent;
+
+	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = "Start Signal")
+		UStaticMeshComponent* StartSphere;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Tile")
 		FCoord coordinates;
@@ -68,6 +74,9 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Minimap")
 		bool seen = false;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Start")
+		bool start_tile = false;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "TileMap")
 		ATileMap* tilemap;

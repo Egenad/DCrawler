@@ -9,14 +9,17 @@ APlayerPawn::APlayerPawn()
  	// Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
-	SceneComponent = CreateDefaultSubobject<USceneComponent>(TEXT("DefaultScene"));
+	SceneComponent = CreateDefaultSubobject<USceneComponent>(TEXT("Root"));
 	SetRootComponent(SceneComponent);
 
+	PlayerScene = CreateDefaultSubobject<USceneComponent>(TEXT("Scene"));
+	PlayerScene->SetupAttachment(SceneComponent);
+
 	character = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Character"));
-	character->SetupAttachment(SceneComponent);
+	character->SetupAttachment(PlayerScene);
 
 	camera = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
-	camera->SetupAttachment(SceneComponent);
+	camera->SetupAttachment(PlayerScene);
 
 	static ConstructorHelpers::FObjectFinder<UStaticMesh>MeshAsset(TEXT("StaticMesh'/Game/Assets/Mesh/BasePlane.BasePlane'"));
 
@@ -80,7 +83,7 @@ void APlayerPawn::TurnRight(bool right) {
 	if (!moving) {
 		moving = true;
 
-		actual_rotation = target_rotation = GetActorRotation();
+		actual_rotation = target_rotation = PlayerScene->GetComponentRotation();
 		int focused = focused_tile.GetValue();
 
 		if (right) {
@@ -128,7 +131,7 @@ void APlayerPawn::Interact(){
 
 void APlayerPawn::TurnTimelineProgress(float alpha)
 {
-	this->SetActorRotation(FMath::Lerp(FQuat(actual_rotation), FQuat(target_rotation), alpha));	
+	PlayerScene->SetWorldRotation(FMath::Lerp(FQuat(actual_rotation), FQuat(target_rotation), alpha));
 }
 
 

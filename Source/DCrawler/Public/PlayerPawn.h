@@ -9,6 +9,7 @@
 #include "Camera/CameraComponent.h"
 #include "TileMap.h"
 #include "BaseAbility.h"
+#include "MinimapTileRepresentation.h"
 
 #include "PlayerPawn.generated.h"
 
@@ -46,6 +47,9 @@ public:
 
 	UFUNCTION(Category = "ForwardTimeline")
 		void ForwardTimelineCompleted();
+
+	UFUNCTION(Category = "Minimap")
+		void InitializeMinimapRepresentation();
 
 	//PROPERTIES
 
@@ -86,6 +90,18 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character")
 		UStaticMeshComponent* character;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character")
+		UStaticMeshComponent* left_hand;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character")
+		UStaticMeshComponent* right_hand;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "MinimapRepresentation")
+		AMinimapTileRepresentation* minimap_representation;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "MinimapRepresentation")
+		TSubclassOf<AMinimapTileRepresentation> minimap_type;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character")
 		UCameraComponent* camera;

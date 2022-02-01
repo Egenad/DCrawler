@@ -21,19 +21,29 @@ APlayerPawn::APlayerPawn()
 	camera = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
 	camera->SetupAttachment(PlayerScene);
 
+	left_hand = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Left Hand"));
+	right_hand = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Right Hand"));
+
+	left_hand->SetupAttachment(character);
+	left_hand->SetVisibility(0);
+	right_hand->SetupAttachment(character);
+
 	static ConstructorHelpers::FObjectFinder<UStaticMesh>MeshAsset(TEXT("StaticMesh'/Game/Assets/Mesh/BasePlane.BasePlane'"));
 
 	if (MeshAsset.Succeeded()) {
 		UStaticMesh* Asset = MeshAsset.Object;
 		character->SetStaticMesh(Asset);
+		right_hand->SetStaticMesh(Asset);
+		left_hand->SetStaticMesh(Asset);
 	}
-
 }
 
 // Called when the game starts or when spawned
 void APlayerPawn::BeginPlay()
 {
 	Super::BeginPlay();
+
+	InitializeMinimapRepresentation();
 
 	if (TurnCurve) {
 		FOnTimelineFloat TurnTimelineProgress;
@@ -122,9 +132,25 @@ void APlayerPawn::Interact(){
 
 	ATile* next_tile = *current_tile->neighbours.Find(focused_tile);
 
-	if (next_tile) {
-		if (next_tile->interactive) {
-			next_tile->interactive->ExecuteInteraction();
+	if (next_tile->IsValidLowLevel()) {
+		if (next_tile->interactive->IsValidLowLevel()) {
+
+			//Check if we can interact with it (it's facing us)
+
+			FVector r = next_tile->GetActorLocation();
+			float t = r.X;
+
+
+			//FRotator rot_interactive = next_tile->interactive->GetActorRotation();
+			//float r = rot_interactive.Pitch;
+			//float my_z = actual_location.X;
+
+			UE_LOG(LogTemp, Warning, TEXT("Interactive: %s"), t);
+			//UE_LOG(LogTemp, Warning, TEXT("My Z: %s"), my_z);
+
+			//if (((r - my_z) - 1) <= 0) {
+				//next_tile->interactive->ExecuteInteraction();
+			//}
 		}
 	}
 }
@@ -145,6 +171,7 @@ void APlayerPawn::ForwardTimelineProgress(float alpha){
 }
 
 void APlayerPawn::ForwardTimelineCompleted(){
+	actual_location = GetActorLocation();
 	moving = false;
 }
 
@@ -158,7 +185,6 @@ void APlayerPawn::MoveForward() {
 			next_tile->reserved = true;
 			current_tile->reserved = false;
 			
-			actual_location = GetActorLocation();
 			target_location = next_tile->GetActorLocation();
 			moving = true;
 			current_tile = next_tile;
@@ -223,4 +249,26 @@ void APlayerPawn::TurnBack() {
 		focused_tile = static_cast<Directions>(focused);
 		turn_timeline.PlayFromStart();
 	}*/
+}
+
+void APlayerPawn::InitializeMinimapRepresentation() {
+	if (!minimap_representation && minimap_type) {
+
+		FTransform transform = GetActorTransform();
+		FActorSpawnParameters spawn_params;
+		spawn_params.Owner = this;
+
+		ATileMap* tm = current_tile->tilemap;
+
+		if (tm) {
+			float offset = tm->minimap_Z_offset;
+			FVector location = transform.GetLocation();
+			location.Z += (offset + 10);
+			minimap_representation = GetWorld()->SpawnActor<AMinimapTileRepresentation>(minimap_type, location, transform.GetRotation().Rotator(), spawn_params);
+			
+			FAttachmentTransformRules rules( EAttachmentRule::KeepWorld, EAttachmentRule::KeepWorld, EAttachmentRule::KeepWorld, false );
+			//minimap_representation->AttachToComponent(SceneComponent, rules);
+			minimap_representation->AttachToActor(this, rules);
+		}
+	}
 }

@@ -562,6 +562,7 @@ void ATileMap::TeleportPlayerToTile(FCoord coordinates) {
 		tile->reserved = true;
 		player->current_tile = tile;
 		player->SetActorLocation(tile->GetActorLocation());
+		player->actual_location = tile->GetActorLocation();
 	}
 }
 

@@ -126,31 +126,25 @@ void APlayerPawn::TurnRight(bool right) {
 
 void APlayerPawn::Interact(){
 	//if my turn
-	
 
 	//Check if the focused tile has any interactive object
 
 	ATile* next_tile = *current_tile->neighbours.Find(focused_tile);
 
 	if (next_tile->IsValidLowLevel()) {
-		if (next_tile->interactive->IsValidLowLevel()) {
+		if (next_tile->interactive) {
 
 			//Check if we can interact with it (it's facing us)
 
-			FVector r = next_tile->GetActorLocation();
-			float t = r.X;
+			 FRotator rot_interactive = next_tile->interactive->GetActorRotation();
+			 FRotator rot_mine = PlayerScene->GetComponentRotation();
 
+			 float yaw_interactive = round(rot_interactive.Yaw);
+			 float yaw_mine = round(rot_mine.Yaw);
 
-			//FRotator rot_interactive = next_tile->interactive->GetActorRotation();
-			//float r = rot_interactive.Pitch;
-			//float my_z = actual_location.X;
-
-			UE_LOG(LogTemp, Warning, TEXT("Interactive: %s"), t);
-			//UE_LOG(LogTemp, Warning, TEXT("My Z: %s"), my_z);
-
-			//if (((r - my_z) - 1) <= 0) {
-				//next_tile->interactive->ExecuteInteraction();
-			//}
+			 if (yaw_interactive == -yaw_mine) {
+				 next_tile->interactive->ExecuteInteraction();
+			 }
 		}
 	}
 }

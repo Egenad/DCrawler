@@ -10,6 +10,7 @@
 #include "TileMap.h"
 #include "BaseAbility.h"
 #include "MinimapTileRepresentation.h"
+#include "Components/ChildActorComponent.h"
 
 #include "PlayerPawn.generated.h"
 
@@ -91,11 +92,11 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character")
 		UStaticMeshComponent* character;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character")
-		UStaticMeshComponent* left_hand;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Object")
+		UChildActorComponent* right_hand_object;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character")
-		UStaticMeshComponent* right_hand;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Object")
+		UChildActorComponent* left_hand_object;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "MinimapRepresentation")
 		AMinimapTileRepresentation* minimap_representation;

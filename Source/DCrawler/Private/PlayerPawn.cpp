@@ -21,20 +21,17 @@ APlayerPawn::APlayerPawn()
 	camera = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
 	camera->SetupAttachment(PlayerScene);
 
-	left_hand = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Left Hand"));
-	right_hand = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Right Hand"));
+	right_hand_object = CreateDefaultSubobject<UChildActorComponent>(TEXT("Right Hand Object"));
+	left_hand_object = CreateDefaultSubobject<UChildActorComponent>(TEXT("Left Hand Object"));
 
-	left_hand->SetupAttachment(character);
-	left_hand->SetVisibility(0);
-	right_hand->SetupAttachment(character);
+	right_hand_object->SetupAttachment(character);
+	left_hand_object->SetupAttachment(character);
 
 	static ConstructorHelpers::FObjectFinder<UStaticMesh>MeshAsset(TEXT("StaticMesh'/Game/Assets/Mesh/BasePlane.BasePlane'"));
 
 	if (MeshAsset.Succeeded()) {
 		UStaticMesh* Asset = MeshAsset.Object;
 		character->SetStaticMesh(Asset);
-		right_hand->SetStaticMesh(Asset);
-		left_hand->SetStaticMesh(Asset);
 	}
 }
 

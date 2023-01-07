@@ -89,7 +89,7 @@ void ATile::ChangeTile(TSubclassOf<ATile> new_type) {
 
 		// Search in the tilemap the actual tile and replace it with the new one
 
-		int index = tilemap->GetTileByLocation(coordinates);
+		int index = tilemap->GetTileByCoordinates(coordinates);
 
 		if (index != -1) {
 			tilemap->tiles[index] = new_tile;

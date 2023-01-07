@@ -44,7 +44,7 @@ public:
 		FCoord TransformWorldLocationToCoordinate(FVector location);
 
 	UFUNCTION(BlueprintCallable, Category = "Tilemap")
-		int32 GetTileByLocation(FCoord coordinates);
+		int32 GetTileByCoordinates(FCoord coordinates);
 
 	UFUNCTION(BlueprintCallable, Category = "Tilemap")
 		FCoord GetLocationByTile(int32 index);

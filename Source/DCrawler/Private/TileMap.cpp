@@ -134,7 +134,7 @@ ATile* ATileMap::GenerateTileType(FCoord coordinates, FTransform transform, TEnu
 	return nullptr;
 }
 
-int32 ATileMap::GetTileByLocation(FCoord coordinates) {
+int32 ATileMap::GetTileByCoordinates(FCoord coordinates) {
 
 	int index = ((width * coordinates.c_y) + coordinates.c_x);
 
@@ -217,7 +217,7 @@ void ATileMap::SetTileNeighbours(ATile* tile) {
 
 		if (aux_x >= 0 && aux_y >= 0) {
 
-			int tile_index = GetTileByLocation(FCoord{ aux_x, aux_y });
+			int tile_index = GetTileByCoordinates(FCoord{ aux_x, aux_y });
 
 			if (tile_index != -1) {
 				if (tiles[tile_index] != nullptr)
@@ -254,7 +254,7 @@ void ATileMap::EnlargeTilemapX() {
 
 					// This tile already exists: add it to the new array
 
-					int index = GetTileByLocation(FCoord{ j, i });
+					int index = GetTileByCoordinates(FCoord{ j, i });
 					if (index != -1) new_tiles.Add(tiles[index]);
 				}
 				else {
@@ -319,7 +319,7 @@ void ATileMap::EnlargeTilemapY() {
 
 					// This tile already exists: add it to the new array
 
-					int index = GetTileByLocation(FCoord{ j, i });
+					int index = GetTileByCoordinates(FCoord{ j, i });
 					if (index != -1) new_tiles.Add(tiles[index]);
 				}
 				else {
@@ -386,7 +386,7 @@ void ATileMap::EnlargeTilemapMX() {
 
 					// This tile already exists: add it to the new array
 
-					int index = GetTileByLocation(FCoord{ (j - 1), i });
+					int index = GetTileByCoordinates(FCoord{ (j - 1), i });
 					if (index != -1) { 
 						tiles[index]->coordinates = FCoord{j,i};
 						new_tiles.Add(tiles[index]); 
@@ -452,7 +452,7 @@ void ATileMap::EnlargeTilemapMY() {
 
 					// This tile already exists: add it to the new array
 
-					int index = GetTileByLocation(FCoord{ j, i-1 });
+					int index = GetTileByCoordinates(FCoord{ j, i-1 });
 					if (index != -1) {
 						tiles[index]->coordinates = FCoord{ j,i };
 						new_tiles.Add(tiles[index]);
@@ -521,7 +521,7 @@ void ATileMap::TeleportPlayerToTile(FCoord coordinates) {
 	if (player != nullptr) {
 
 		ATile* tile = nullptr;
-		int index = GetTileByLocation(coordinates);
+		int index = GetTileByCoordinates(coordinates);
 
 		bool valid_tile = false;
 

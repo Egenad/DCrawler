@@ -6,6 +6,8 @@
 #include "GameFramework/Actor.h"
 #include "BaseAbility.h"
 #include "Tile.h"
+#include "MinimapTileRepresentation.h"
+#include "Components/WidgetComponent.h"
 #include "BaseEnemy.generated.h"
 
 UCLASS()
@@ -20,8 +22,14 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Enemy")
 		int level;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Enemy")
-		float health;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Health")
+		float last_percentage;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Health")
+		float actual_health;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Health")
+		float max_health;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Enemy")
 		float base_damage;
@@ -38,6 +46,12 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Tile")
 		ATile* current_tile;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "MinimapRepresentation")
+		AMinimapTileRepresentation* minimap_representation;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "MinimapRepresentation")
+		TSubclassOf<AMinimapTileRepresentation> minimap_type;
+
 	// Comps
 
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = "Translation")
@@ -45,6 +59,9 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character")
 		UStaticMeshComponent* character;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Widget")
+		UWidgetComponent* life_bar;
 
 	// Functions
 
@@ -54,6 +71,8 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Tilemap")
 		void initializeTile();
 
+	UFUNCTION(BlueprintCallable, Category = "Minimap")
+		void InitializeMinimapRepresentation();
 
 protected:
 	// Called when the game starts or when spawned

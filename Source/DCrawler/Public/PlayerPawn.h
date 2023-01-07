@@ -52,6 +52,12 @@ public:
 	UFUNCTION(Category = "Minimap")
 		void InitializeMinimapRepresentation();
 
+	UFUNCTION(Category = "SFX")
+		void PlayFootstepAudioByTag(FName tag);
+
+	UFUNCTION(Category = "Enemy")
+		void SetEnemyHudVisibilityInTile(ATile* next_tile, bool visibility);
+
 	//PROPERTIES
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Player")
@@ -80,6 +86,9 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Timeline")
 		UCurveFloat* ForwardCurve;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "SFX")
+		TMap<FName, USoundBase*> sound_map;
 
 	// Comps
 

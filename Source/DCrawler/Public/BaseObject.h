@@ -21,6 +21,11 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Representation")
 		UStaticMeshComponent* object;
 
+	// FUNCTIONS
+
+	UFUNCTION(BlueprintImplementableEvent, Category = "Animation")
+		void AttackAnimation();
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;

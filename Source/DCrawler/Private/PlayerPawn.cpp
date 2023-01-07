@@ -2,6 +2,9 @@
 
 
 #include "PlayerPawn.h"
+#include "Kismet/GameplayStatics.h"
+#include "BaseEnemy.h"
+#include "BaseObject.h"
 
 // Sets default values
 APlayerPawn::APlayerPawn()
@@ -87,6 +90,8 @@ void APlayerPawn::SetupPlayerInputComponent(UInputComponent* PlayerInputComponen
 
 void APlayerPawn::TurnRight(bool right) {
 
+	ATile* last_tile = *current_tile->neighbours.Find(focused_tile);
+
 	if (!moving) {
 		moving = true;
 
@@ -117,7 +122,15 @@ void APlayerPawn::TurnRight(bool right) {
 
 		//Set next tile to seen
 		ATile* next_tile = *current_tile->neighbours.Find(focused_tile);
-		if(next_tile) next_tile->SeeTile();
+		
+		if (next_tile) { 
+			next_tile->SeeTile();
+			SetEnemyHudVisibilityInTile(next_tile, true);
+
+			if (last_tile) {
+				SetEnemyHudVisibilityInTile(last_tile, false);
+			}
+		}
 	}
 }
 
@@ -142,6 +155,17 @@ void APlayerPawn::Interact(){
 			 if (yaw_interactive == -yaw_mine) {
 				 next_tile->interactive->ExecuteInteraction();
 			 }
+		}
+		else {
+			if (next_tile->standing_actor->IsValidLowLevel()) {	
+				UGameplayStatics::ApplyDamage(next_tile->standing_actor, base_damage, UGameplayStatics::GetPlayerController(this, 0), this, nullptr);
+			}
+
+			ABaseObject* right_object = Cast<ABaseObject>(right_hand_object->GetChildActor());
+			
+			if (right_object) {
+				right_object->AttackAnimation();
+			}
 		}
 	}
 }
@@ -181,15 +205,34 @@ void APlayerPawn::MoveForward() {
 			current_tile = next_tile;
 
 			forward_timeline.PlayFromStart();
+			
+			//Play footstep sound
+			if (next_tile->Tags.Num() > 0) PlayFootstepAudioByTag(next_tile->Tags[0]);
 
 			//Set next tile to seen
 			next_tile = *current_tile->neighbours.Find(focused_tile);
-			if(next_tile) next_tile->SeeTile();
+			if (next_tile) { 
+				next_tile->SeeTile(); 
+				SetEnemyHudVisibilityInTile(next_tile, true);
+			}
+		}
+		else {
+			PlayFootstepAudioByTag(TEXT("Block"));
 		}
 	}
 }
 
+void APlayerPawn::PlayFootstepAudioByTag(FName tag) {
+	USoundBase* sound_to_spawn = *sound_map.Find(tag);
+	
+	if (sound_to_spawn->IsValidLowLevel()) {
+		UGameplayStatics::SpawnSound2D(this, sound_to_spawn, 1, 1, 0);
+	}
+}
+
 void APlayerPawn::TurnBack() {
+
+	ATile* last_tile = *current_tile->neighbours.Find(focused_tile);
 
 	int focused = focused_tile.GetValue();
 	int last_focused = focused;
@@ -206,6 +249,10 @@ void APlayerPawn::TurnBack() {
 	if (next_tile && !moving) {
 		if (next_tile->can_step_up && !next_tile->reserved) {
 
+			if (last_tile) {
+				SetEnemyHudVisibilityInTile(last_tile, false);
+			}
+
 			next_tile->reserved = true;
 			current_tile->reserved = false;
 
@@ -216,30 +263,19 @@ void APlayerPawn::TurnBack() {
 
 			forward_timeline.PlayFromStart();
 
+			//Play footstep sound
+			if (next_tile->Tags.Num() > 0) PlayFootstepAudioByTag(next_tile->Tags[0]);
+
 			//Set next tile to seen
 			next_tile = *current_tile->neighbours.Find(focused_tile);
 			if(next_tile) next_tile->SeeTile();
 		}
+		else {
+			PlayFootstepAudioByTag(TEXT("Block"));
+		}
 	}
 
 	focused_tile = static_cast<Directions>(last_focused);
-
-	/*if (!moving) {
-		moving = true;
-
-		actual_rotation = target_rotation = GetActorRotation();
-		int focused = focused_tile.GetValue();
-
-		target_rotation.Yaw += 180;
-		focused += 2;
-
-		if (focused >= D_END) {
-			focused -= D_END;
-		}
-
-		focused_tile = static_cast<Directions>(focused);
-		turn_timeline.PlayFromStart();
-	}*/
 }
 
 void APlayerPawn::InitializeMinimapRepresentation() {
@@ -260,6 +296,18 @@ void APlayerPawn::InitializeMinimapRepresentation() {
 			FAttachmentTransformRules rules( EAttachmentRule::KeepWorld, EAttachmentRule::KeepWorld, EAttachmentRule::KeepWorld, false );
 			//minimap_representation->AttachToComponent(SceneComponent, rules);
 			minimap_representation->AttachToActor(this, rules);
+		}
+	}
+}
+
+void APlayerPawn::SetEnemyHudVisibilityInTile(ATile* next_tile, bool visibility) {
+	// If the tile is reserved and can be stepped up, it means that an enemy is in front of us
+	if (next_tile->can_step_up && next_tile->reserved) {	
+		if (next_tile->standing_actor->IsValidLowLevel()) {
+			ABaseEnemy* enemy = Cast<ABaseEnemy>(next_tile->standing_actor);
+			if (enemy) {
+				enemy->life_bar->SetVisibility(visibility);
+			}
 		}
 	}
 }

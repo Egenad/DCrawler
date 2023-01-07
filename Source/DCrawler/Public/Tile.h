@@ -90,6 +90,9 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Minimap")
 		TSubclassOf<AMinimapTileRepresentation> minimap_rep_type;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Enemy")
+		AActor* standing_actor;
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;

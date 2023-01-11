@@ -19,7 +19,15 @@ enum TileType {
 	TT_Wall			UMETA(DisplayName = "Wall"),
 	TT_Ice			UMETA(DisplayName = "Ice"),
 	TT_Gate			UMETA(DisplayName = "Gate"),
+	TT_Lamp			UMETA(DisplayName = "Lamp"),
 	TT_Decoration	UMETA(DisplayName = "Decoration")
+};
+
+UENUM()
+enum RoomType {
+	T_ROOM			UMETA(DisplayName = "Room"),
+	T_CORRIDOR		UMETA(DisplayName = "Corridor"),
+	T_END
 };
 
 USTRUCT(BlueprintType)
@@ -48,4 +56,24 @@ public:
 
 	UPROPERTY(BlueprintReadOnly)
 		FRotator rotation;
+};
+
+USTRUCT(BlueprintType)
+struct FProceduralRoom {
+	
+	GENERATED_BODY()
+
+public:
+	
+	UPROPERTY(BlueprintReadOnly)
+		FCoord coordinates;
+
+	UPROPERTY(BlueprintReadOnly)
+		int width;
+
+	UPROPERTY(BlueprintReadOnly)
+		int height;
+
+	UPROPERTY(BlueprintReadOnly)
+		TEnumAsByte<RoomType> room_type;
 };

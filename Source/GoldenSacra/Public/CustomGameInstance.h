@@ -24,5 +24,8 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Audio")
 		UAudioComponent* actual_sound;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Audio")
+		float MAX_LEGAL_LUCK = 100;
 	
 };

@@ -2,7 +2,7 @@
 
 #include "Utility.generated.h"
 
-UENUM()
+UENUM(BlueprintType)
 enum Directions {
 	D_UP		UMETA(DisplayName = "Up"),
 	D_RIGHT		UMETA(DisplayName = "Right"),

@@ -11,7 +11,7 @@
 #include "BaseEnemy.generated.h"
 
 UCLASS()
-class GOLDENSACRA_API ABaseEnemy : public AActor
+class GOLDENSACRA_API ABaseEnemy : public APawn
 {
 	GENERATED_BODY()
 	
@@ -38,7 +38,7 @@ public:
 		float mana;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Enemy")
-		float stamina;
+		float luck;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Attribute")
 		TArray<TSubclassOf<ABaseAbility>> abilities;
@@ -46,7 +46,7 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Tile")
 		ATile* current_tile;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "MinimapRepresentation")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "MinimapRepresentation")
 		AMinimapTileRepresentation* minimap_representation;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "MinimapRepresentation")
@@ -73,6 +73,9 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "Minimap")
 		void InitializeMinimapRepresentation();
+
+	UFUNCTION(BlueprintCallable, Category = "Attack")
+		float GetNextAttackDamage();
 
 protected:
 	// Called when the game starts or when spawned

@@ -4,6 +4,7 @@
 #include "BaseEnemy.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "Kismet/GameplayStatics.h"
+#include "CustomGameInstance.h"
 #include "TileMap.h"
 
 // Sets default values
@@ -21,7 +22,7 @@ ABaseEnemy::ABaseEnemy()
 	character->SetupAttachment(SceneComponent);
 
 	life_bar = CreateDefaultSubobject<UWidgetComponent>(TEXT("Health Widget"));
-	life_bar->SetupAttachment(character);
+	life_bar->SetupAttachment(SceneComponent);
 	life_bar->SetVisibility(false);
 
 	static ConstructorHelpers::FObjectFinder<UStaticMesh>MeshAsset(TEXT("StaticMesh'/Game/Assets/Mesh/BasePlane.BasePlane'"));
@@ -37,7 +38,7 @@ ABaseEnemy::ABaseEnemy()
 	last_percentage = 1;
 	base_damage = 24;
 	mana = 100;
-	stamina = 100;
+	luck = 8;
 }
 
 void ABaseEnemy::setOrientationToPlayerCamera()
@@ -123,4 +124,18 @@ void ABaseEnemy::InitializeMinimapRepresentation() {
 			minimap_representation->AttachToActor(this, rules);
 		}
 	}
+}
+
+float ABaseEnemy::GetNextAttackDamage() {
+
+	UCustomGameInstance* gi = Cast<UCustomGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
+
+	float bonus = 0;
+
+	if (gi) {
+		bonus = base_damage * FMath::FRandRange(-0.10, 0.10 * luck / gi->MAX_LEGAL_LUCK);
+	}
+
+	return base_damage + bonus;
+
 }

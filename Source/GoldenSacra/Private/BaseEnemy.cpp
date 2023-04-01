@@ -25,6 +25,9 @@ ABaseEnemy::ABaseEnemy()
 	life_bar->SetupAttachment(SceneComponent);
 	life_bar->SetVisibility(false);
 
+	direction = CreateDefaultSubobject<UArrowComponent>(TEXT("Direction"));
+	direction->SetupAttachment(SceneComponent);
+
 	static ConstructorHelpers::FObjectFinder<UStaticMesh>MeshAsset(TEXT("StaticMesh'/Game/Assets/Mesh/BasePlane.BasePlane'"));
 	
 	if (MeshAsset.Succeeded()) {

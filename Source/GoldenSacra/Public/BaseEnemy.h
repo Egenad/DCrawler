@@ -8,6 +8,7 @@
 #include "Tile.h"
 #include "MinimapTileRepresentation.h"
 #include "Components/WidgetComponent.h"
+#include "Components/ArrowComponent.h"
 #include "BaseEnemy.generated.h"
 
 UCLASS()
@@ -54,8 +55,11 @@ public:
 
 	// Comps
 
-	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = "Translation")
+	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = "Traslation")
 		USceneComponent* SceneComponent;
+
+	UPROPERTY(VisibleDefaultsOnly, BlueprintReadWrite, Category = "Traslation")
+		UArrowComponent* direction;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character")
 		UStaticMeshComponent* character;
@@ -75,7 +79,7 @@ public:
 		void InitializeMinimapRepresentation();
 
 	UFUNCTION(BlueprintCallable, Category = "Attack")
-		float GetNextAttackDamage();
+		float GetNextAttackDamage(); 
 
 protected:
 	// Called when the game starts or when spawned

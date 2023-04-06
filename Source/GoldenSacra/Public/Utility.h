@@ -33,7 +33,8 @@ enum RoomType {
 UENUM()
 enum ActionType {
 	T_ACTION		UMETA(DisplayName = "Action"),
-	T_MOVE			UMETA(DisplayName = "Movement")
+	T_MOVE			UMETA(DisplayName = "Movement"),
+	T_NONE			UMETA(DisplayName = "None")
 };
 
 USTRUCT(BlueprintType)

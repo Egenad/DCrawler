@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
+#include "BaseEnemy.h"
 #include "TurnSystemComponent.generated.h"
 
 
@@ -11,13 +12,6 @@ UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class GOLDENSACRA_API UTurnSystemComponent : public UActorComponent
 {
 	GENERATED_BODY()
-
-public:	
-	// Sets default values for this component's properties
-	UTurnSystemComponent();
-
-	UFUNCTION(BlueprintCallable, Category = "Process")
-		void processActions();
 
 protected:
 	// Called when the game starts
@@ -27,6 +21,15 @@ public:
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
-	// Array con los punteros de los enemigos.
+	// Functions
+	UTurnSystemComponent();
+
+	UFUNCTION(BlueprintCallable, Category = "Process")
+		void processActions();
+
+	// Properties
+
+	// Array with enemies of current level
+	TArray<AActor*> enemies;
 		
 };

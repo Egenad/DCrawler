@@ -11,4 +11,6 @@ AGoldenSacraGameMode::AGoldenSacraGameMode()
 	static ConstructorHelpers::FClassFinder<APawn> PlayerPawnClassFinder(TEXT("/Game/FirstPerson/Blueprints/BP_FirstPersonCharacter"));
 	DefaultPawnClass = PlayerPawnClassFinder.Class;
 
+	turnSystemCP = CreateDefaultSubobject<UTurnSystemComponent>(TEXT("Turn System Component"));
+	this->AddOwnedComponent(turnSystemCP);
 }

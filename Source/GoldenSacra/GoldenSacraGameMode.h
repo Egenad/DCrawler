@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/GameModeBase.h"
+#include "Public/TurnSystemComponent.h"
 #include "GoldenSacraGameMode.generated.h"
 
 UCLASS(minimalapi)
@@ -13,6 +14,8 @@ class AGoldenSacraGameMode : public AGameModeBase
 
 public:
 	AGoldenSacraGameMode();
+
+	UTurnSystemComponent* turnSystemCP;
 };
 
 

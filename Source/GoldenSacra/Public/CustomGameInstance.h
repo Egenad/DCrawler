@@ -6,6 +6,7 @@
 #include "Engine/GameInstance.h"
 
 #include "Components/AudioComponent.h"
+#include "EventManagerComponent.h"
 
 #include "CustomGameInstance.generated.h"
 
@@ -27,5 +28,7 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Audio")
 		float MAX_LEGAL_LUCK = 100;
+
+	UEventManagerComponent* eventManagerCP;
 	
 };

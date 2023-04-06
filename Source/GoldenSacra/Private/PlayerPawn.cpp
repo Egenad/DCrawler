@@ -18,6 +18,9 @@ APlayerPawn::APlayerPawn()
 	PlayerScene = CreateDefaultSubobject<USceneComponent>(TEXT("Scene"));
 	PlayerScene->SetupAttachment(SceneComponent);
 
+	EnemyTarget = CreateDefaultSubobject<USceneComponent>(TEXT("EnemyTarget"));
+	EnemyTarget->SetupAttachment(SceneComponent);
+
 	character = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Character"));
 	character->SetupAttachment(PlayerScene);
 
@@ -29,6 +32,8 @@ APlayerPawn::APlayerPawn()
 
 	right_hand_object->SetupAttachment(character);
 	left_hand_object->SetupAttachment(character);
+
+	myTurn = true;
 
 	static ConstructorHelpers::FObjectFinder<UStaticMesh>MeshAsset(TEXT("StaticMesh'/Game/Assets/Mesh/BasePlane.BasePlane'"));
 
@@ -149,7 +154,7 @@ void APlayerPawn::Interact(){
 				 next_tile->interactive->ExecuteInteraction();
 			 }
 		}
-		else {
+		else if(myTurn){ // Attack Action
 			if (next_tile->standing_actor->IsValidLowLevel()) {	
 				UGameplayStatics::ApplyDamage(next_tile->standing_actor, base_damage, UGameplayStatics::GetPlayerController(this, 0), this, nullptr);
 			}
@@ -177,7 +182,7 @@ void APlayerPawn::MoveForward() {
 
 	ATile* next_tile = *current_tile->neighbours.Find(focused_tile);
 
-	if (next_tile && !moving) {
+	if (next_tile && !moving && myTurn) {
 		if (next_tile->can_step_up && !next_tile->reserved) {
 			
 			next_tile->reserved = true;
@@ -189,6 +194,9 @@ void APlayerPawn::MoveForward() {
 
 			actualObjectZ = right_hand_object->GetComponentLocation().Z;
 			targetObjectZ = right_hand_object->GetComponentLocation().Z - MAX_OBJECT_MOVEMENTS;
+
+			FVector targetLocation = EnemyTarget->GetComponentLocation();
+			EnemyTarget->SetWorldLocation(FVector{ targetLocation.X, targetLocation.Y, targetObjectZ }, false);
 
 			MovePlayer();
 			
@@ -234,7 +242,7 @@ void APlayerPawn::TurnBack() {
 
 	ATile* next_tile = *current_tile->neighbours.Find(focused_tile);
 
-	if (next_tile && !moving) {
+	if (next_tile && !moving && myTurn) {
 		if (next_tile->can_step_up && !next_tile->reserved) {
 
 			if (last_tile) {
@@ -251,6 +259,9 @@ void APlayerPawn::TurnBack() {
 
 			actualObjectZ = right_hand_object->GetComponentLocation().Z;
 			targetObjectZ = right_hand_object->GetComponentLocation().Z - MAX_OBJECT_MOVEMENTS;
+
+			FVector targetLocation = EnemyTarget->GetComponentLocation();
+			EnemyTarget->SetWorldLocation(FVector{ targetLocation.X, targetLocation.Y, targetObjectZ }, false);
 
 			MovePlayer();
 
@@ -301,4 +312,11 @@ void APlayerPawn::SetEnemyHudVisibilityInTile(ATile* next_tile, bool visibility)
 			}
 		}
 	}
+}
+
+void APlayerPawn::EndTurn() {
+	myTurn = false;
+	/*AGoldenSacraGameMode* game_mode = static_cast<AGoldenSacraGameMode*>(UGameplayStatics::GetGameMode(GetWorld()));
+	if (game_mode != nullptr && game_mode->IsValidLowLevel() && game_mode->turnSystemCP->IsValidLowLevel()) {
+	}*/
 }

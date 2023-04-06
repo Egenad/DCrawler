@@ -42,6 +42,9 @@ public:
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "Action")
 		void MovePlayer();
 
+	UFUNCTION(BlueprintCallable, Category = "Action")
+		void EndTurn();
+
 	UFUNCTION(Category = "TurnTimeline")
 		void TurnTimelineProgress(float alpha);
 
@@ -100,6 +103,9 @@ public:
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = "Translation")
 		USceneComponent* PlayerScene;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Enemies")
+		USceneComponent* EnemyTarget;
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character")
 		UStaticMeshComponent* character;
 
@@ -142,6 +148,9 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Attribute")
 		float stamina;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Attribute")
+		bool myTurn;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Attribute")
 		TArray<TSubclassOf<ABaseAbility>> abilities;

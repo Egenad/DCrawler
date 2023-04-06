@@ -27,6 +27,7 @@ ABaseEnemy::ABaseEnemy()
 
 	direction = CreateDefaultSubobject<UArrowComponent>(TEXT("Direction"));
 	direction->SetupAttachment(SceneComponent);
+	direction->SetVisibility(false);
 
 	static ConstructorHelpers::FObjectFinder<UStaticMesh>MeshAsset(TEXT("StaticMesh'/Game/Assets/Mesh/BasePlane.BasePlane'"));
 	
@@ -42,6 +43,8 @@ ABaseEnemy::ABaseEnemy()
 	base_damage = 24;
 	mana = 100;
 	luck = 8;
+
+	action_type = T_NONE;
 }
 
 void ABaseEnemy::setOrientationToPlayerCamera()

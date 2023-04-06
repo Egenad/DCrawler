@@ -6,6 +6,7 @@
 #include "GameFramework/Actor.h"
 #include "BaseAbility.h"
 #include "Tile.h"
+#include "Utility.h"
 #include "MinimapTileRepresentation.h"
 #include "Components/WidgetComponent.h"
 #include "Components/ArrowComponent.h"
@@ -40,6 +41,9 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Enemy")
 		float luck;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AI")
+		TEnumAsByte<ActionType> action_type;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Attribute")
 		TArray<TSubclassOf<ABaseAbility>> abilities;

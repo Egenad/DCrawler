@@ -112,7 +112,7 @@
 		"directory": "I:\\Unreal\\UE_5.1\\Engine\\Source"
 	},
 	{
-		"file": "C:\\Users\\Angel\\Documents\\GitHub\\DCrawler\\Source\\GoldenSacra\\Private\\EventManagerComponent.cpp",
+		"file": "C:\\Users\\Angel\\Documents\\GitHub\\DCrawler\\Source\\GoldenSacra\\Private\\EventManagerObject.cpp",
 		"arguments": [
 			"C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Community\\VC\\Tools\\MSVC\\14.29.30133\\bin\\HostX64\\x64\\cl.exe",
 			"@C:\\Users\\Angel\\Documents\\GitHub\\DCrawler\\.vscode\\compileCommands_GoldenSacra\\GoldenSacra.255.rsp"
@@ -216,7 +216,7 @@
 		"directory": "I:\\Unreal\\UE_5.1\\Engine\\Source"
 	},
 	{
-		"file": "C:\\Users\\Angel\\Documents\\GitHub\\DCrawler\\Source\\GoldenSacra\\Public\\EventManagerComponent.h",
+		"file": "C:\\Users\\Angel\\Documents\\GitHub\\DCrawler\\Source\\GoldenSacra\\Public\\EventManagerObject.h",
 		"arguments": [
 			"C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Community\\VC\\Tools\\MSVC\\14.29.30133\\bin\\HostX64\\x64\\cl.exe",
 			"@C:\\Users\\Angel\\Documents\\GitHub\\DCrawler\\.vscode\\compileCommands_GoldenSacra\\GoldenSacra.255.rsp"

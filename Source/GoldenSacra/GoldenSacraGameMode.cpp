@@ -2,6 +2,9 @@
 
 #include "GoldenSacraGameMode.h"
 #include "GoldenSacraCharacter.h"
+#include "Public/CustomGameInstance.h"
+#include "Public/Utility.h"
+#include "Kismet/GameplayStatics.h"
 #include "UObject/ConstructorHelpers.h"
 
 AGoldenSacraGameMode::AGoldenSacraGameMode()
@@ -13,4 +16,15 @@ AGoldenSacraGameMode::AGoldenSacraGameMode()
 
 	turnSystemCP = CreateDefaultSubobject<UTurnSystemComponent>(TEXT("Turn System Component"));
 	this->AddOwnedComponent(turnSystemCP);
+
+	addGameListeners();
+}
+
+void AGoldenSacraGameMode::addGameListeners(){
+	if(GetWorld() != nullptr){
+		UCustomGameInstance* game_instance = static_cast<UCustomGameInstance*>(UGameplayStatics::GetGameInstance(GetWorld()));
+		if(game_instance->IsValidLowLevel()){
+			game_instance->addListener(TT_PROCESS_TURN, [&](){turnSystemCP->processActions();});
+		}
+	}
 }

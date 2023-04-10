@@ -3,13 +3,9 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Utility.h"
 #include "UObject/NoExportTypes.h"
 #include "CustomEvent.generated.h"
-
-UENUM(BlueprintType)
-enum Type {
-    TT_PROCESS_TURN
-};
 
 /**
  * 
@@ -21,16 +17,16 @@ class GOLDENSACRA_API UCustomEvent : public UObject
 
 public:
 
-    TEnumAsByte<Type> getType() {
+    TEnumAsByte<EventType> getType() {
         return type;
     }
 
-    void initEvent(TEnumAsByte<Type> new_type) {
+    void initEvent(TEnumAsByte<EventType> new_type) {
         type = new_type;
     }
 
 private:
 
-    TEnumAsByte<Type> type;
+    TEnumAsByte<EventType> type;
 	
 };

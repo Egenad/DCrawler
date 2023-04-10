@@ -99,7 +99,7 @@
 			}
 		},
 		{
-			"name": "Launch GoldenSacraEditor (DebugGame)",
+			"name": "Debug Editor",
 			"request": "launch",
 			"program": "I:\\Unreal\\UE_5.1\\Engine\\Binaries\\Win64\\UnrealEditor-Win64-DebugGame.exe",
 			"preLaunchTask": "GoldenSacraEditor Win64 DebugGame Build",

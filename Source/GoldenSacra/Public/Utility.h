@@ -37,6 +37,12 @@ enum ActionType {
 	T_NONE			UMETA(DisplayName = "None")
 };
 
+UENUM(BlueprintType)
+enum EventType {
+    TT_PROCESS_TURN			UMETA(DisplayName = "Process Turn"),
+    TT_CAMERA_LOOK_TO		UMETA(DisplayName = "Camera Look To")
+};
+
 USTRUCT(BlueprintType)
 struct FCoord {
 

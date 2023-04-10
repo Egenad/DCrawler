@@ -6,7 +6,7 @@
 #include "Engine/GameInstance.h"
 
 #include "Components/AudioComponent.h"
-#include "EventManagerComponent.h"
+#include "EventManagerObject.h"
 
 #include "CustomGameInstance.generated.h"
 
@@ -20,8 +20,19 @@ class GOLDENSACRA_API UCustomGameInstance : public UGameInstance
 
 public:
 
+	//Functions
+
+	void Init() override;
+
 	UFUNCTION(BlueprintCallable, Category = "Audio")
 		void PlayLevelAudio(USoundBase* sound_to_play, float volume, bool persistent_audio);
+
+	UFUNCTION(BlueprintCallable, Category = "Events")
+		void addEvent(UCustomEvent* event);
+
+	void addListener(TEnumAsByte<EventType> typeEvent, TFunction<void()> funcRef);
+
+	//Properties
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Audio")
 		UAudioComponent* actual_sound;
@@ -29,6 +40,8 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Audio")
 		float MAX_LEGAL_LUCK = 100;
 
-	UEventManagerComponent* eventManagerCP;
+private:
+
+	UEventManagerObject* eventManagerCP;
 	
 };

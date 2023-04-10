@@ -16,6 +16,11 @@ public:
 	AGoldenSacraGameMode();
 
 	UTurnSystemComponent* turnSystemCP;
+
+private:
+
+	UFUNCTION(BlueprintCallable, Category="Event Manager")
+		void addGameListeners();
 };
 
 

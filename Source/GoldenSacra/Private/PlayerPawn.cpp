@@ -4,6 +4,7 @@
 #include "PlayerPawn.h"
 #include "Kismet/GameplayStatics.h"
 #include "BaseEnemy.h"
+#include "CustomGameInstance.h"
 #include "BaseObject.h"
 
 // Sets default values
@@ -316,7 +317,12 @@ void APlayerPawn::SetEnemyHudVisibilityInTile(ATile* next_tile, bool visibility)
 
 void APlayerPawn::EndTurn() {
 	myTurn = false;
-	/*AGoldenSacraGameMode* game_mode = static_cast<AGoldenSacraGameMode*>(UGameplayStatics::GetGameMode(GetWorld()));
-	if (game_mode != nullptr && game_mode->IsValidLowLevel() && game_mode->turnSystemCP->IsValidLowLevel()) {
-	}*/
+	moving = false;
+	actual_location = this->GetActorLocation();
+	UCustomGameInstance* game_instance = static_cast<UCustomGameInstance*>(UGameplayStatics::GetGameInstance(GetWorld()));
+	if(game_instance->IsValidLowLevel()){
+		UCustomEvent* new_event = NewObject<UCustomEvent>();
+		new_event->initEvent(TT_PROCESS_TURN);
+		game_instance->addEvent(new_event);
+	}
 }

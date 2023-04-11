@@ -72,3 +72,7 @@ Plugins/*/Intermediate/*
 
 # Cache files for the editor to use
 DerivedDataCache/*
+
+.vscode/*
+*.rsp
+.vscode/compileCommands_Default/ActorLayerUtilities.205.rsp
